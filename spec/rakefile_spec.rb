@@ -34,5 +34,5 @@ EOH
     its(:stdout) { is_expected.to include('rake install') }
     its(:stdout) { is_expected.to include('rake release') }
     its(:stdout) { is_expected.to include('rake spec') }
-  end
+  end # /describe list of tasks
 end
