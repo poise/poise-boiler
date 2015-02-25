@@ -17,21 +17,6 @@
 require 'spec_helper'
 
 describe 'poise_boiler/rakefile' do
-  let(:rake_command) { '' }
-  # NEXT STEP: set BUNDLE_GEMFILE to point at the project level gemfile, not the temp dir
-  subject do
-    Mixlib::ShellOut.new(
-      "bundle exec rake #{rake_command}",
-      cwd: temp_path,
-      environment: {
-        'BUNDLE_GEMFILE' => File.expand_path('../../Gemfile', __FILE__),
-      },
-    ).tap do |cmd|
-      cmd.run_command
-      cmd.error!
-    end
-  end
-
   file 'Rakefile', 'require "poise_boiler/rakefile"'
   file 'test.gemspec', <<-EOH
 Gem::Specification.new do |spec|
@@ -41,7 +26,7 @@ end
 EOH
 
   describe 'list of tasks' do
-    let(:rake_command) { '-T' }
+    command 'rake -T'
     its(:stdout) { is_expected.to include('rake build') }
     its(:stdout) { is_expected.to include('rake chef:build') }
     its(:stdout) { is_expected.to include('rake chef:foodcritic') }

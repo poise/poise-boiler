@@ -32,6 +32,24 @@ module PoiseBoilerHelper
   end
 
   module ClassMethods
+    def command(cmd, options={}, &block)
+      subject do
+        cmd = block.call if block
+        Mixlib::ShellOut.new(
+          "bundle exec #{cmd}",
+          {
+            cwd: temp_path,
+            environment: {
+              'BUNDLE_GEMFILE' => File.expand_path('../../Gemfile', __FILE__),
+            },
+          }.merge(options),
+        ).tap do |cmd|
+          cmd.run_command
+          cmd.error!
+        end
+      end
+    end
+
     def file(path, content)
       before do
         IO.write(File.join(temp_path, path), content)
