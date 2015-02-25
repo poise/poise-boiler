@@ -35,4 +35,39 @@ EOH
     its(:stdout) { is_expected.to include('rake release') }
     its(:stdout) { is_expected.to include('rake spec') }
   end # /describe list of tasks
+
+  describe 'specs in spec/' do
+    command 'rake spec'
+    file 'spec/thing_spec.rb', <<-EOH
+describe 'a thing' do
+  it { expect(1).to eq(1) }
+end
+EOH
+    its(:stdout) { is_expected.to include('1 example, 0 failures') }
+  end # /describe specs in spec/
+
+  describe 'specs in test/spec/' do
+    command 'rake spec'
+    file 'test/spec/thing_spec.rb', <<-EOH
+describe 'a thing' do
+  it { expect(1).to eq(1) }
+end
+EOH
+    its(:stdout) { is_expected.to include('1 example, 0 failures') }
+  end # /describe specs in test/spec/
+
+  describe 'specs in both spec/ and test/spec/' do
+    command 'rake spec'
+    file 'spec/thing_spec.rb', <<-EOH
+describe 'a thing' do
+  it { expect(1).to eq(1) }
+end
+EOH
+    file 'test/spec/another_thing_spec.rb', <<-EOH
+describe 'another thing' do
+  it { expect(1).to eq(1) }
+end
+EOH
+    its(:stdout) { is_expected.to include('2 examples, 0 failures') }
+  end # /describe specs in both spec/ and test/spec/
 end
