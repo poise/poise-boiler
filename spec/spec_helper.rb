@@ -32,7 +32,7 @@ module PoiseBoilerHelper
   end
 
   module ClassMethods
-    def command(cmd, options={}, &block)
+    def command(cmd=nil, options={}, &block)
       subject do
         cmd = block.call if block
         Mixlib::ShellOut.new(
@@ -50,9 +50,12 @@ module PoiseBoilerHelper
       end
     end
 
-    def file(path, content)
+    def file(path, content=nil, &block)
       before do
-        IO.write(File.join(temp_path, path), content)
+        content = block.call if block
+        full_path = File.join(temp_path, path)
+        FileUtils.mkdir_p(File.dirname(full_path))
+        IO.write(full_path, content)
       end
     end
 
