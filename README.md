@@ -3,7 +3,6 @@
 [![Build Status](https://img.shields.io/travis/poise/poise-boiler.svg)](https://travis-ci.org/poise/poise-boiler)
 [![Gem Version](https://img.shields.io/gem/v/poise-boiler.svg)](https://rubygems.org/gems/poise-boiler)
 [![Code Climate](https://img.shields.io/codeclimate/github/poise/poise-boiler.svg)](https://codeclimate.com/github/poise/poise-boiler)
-[![Coverage](https://img.shields.io/codecov/c/github/poise/poise-boiler.svg)](https://codecov.io/github/poise/poise-boiler)
 [![Gemnasium](https://img.shields.io/gemnasium/poise/poise-boiler.svg)](https://gemnasium.com/poise/poise-boiler)
 [![License](https://img.shields.io/badge/license-Apache_2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
