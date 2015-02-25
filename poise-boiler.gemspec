@@ -33,12 +33,12 @@ Gem::Specification.new do |spec|
   spec.test_files = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = %w{lib}
 
-  # development gems
+  # Development gems
   spec.add_dependency 'rake', '~> 10.4.2'
   spec.add_dependency 'pry'
   spec.add_dependency 'travis'
 
-  # test gems
+  # Test gems
   spec.add_dependency 'rspec', '~> 3.2.0'
   spec.add_dependency 'rspec-its', '~> 1.2.0'
   spec.add_dependency 'chefspec', '~> 4.2.0'
@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'simplecov', '~> 0.9.1'
   spec.add_dependency 'foodcritic'
 
-  # integration gems
+  # Integration gems
   spec.add_dependency 'test-kitchen', '~> 1.3.1'
   spec.add_dependency 'kitchen-vagrant'
   spec.add_dependency 'vagrant-wrapper'
@@ -54,7 +54,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'kitchen-sync'
   spec.add_dependency 'berkshelf'
 
-  # travis gems
+  # Travis gems
   spec.add_dependency 'codeclimate-test-reporter'
   spec.add_dependency 'codecov'
+
+  # Development dependencies (yo dawg)
+  spec.add_development_dependency 'mixlib-shellout'
+  spec.add_development_dependency 'halite' # This is a circular dependency
 end

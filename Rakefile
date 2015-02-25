@@ -14,20 +14,17 @@
 # limitations under the License.
 #
 
-source 'https://rubygems.org/'
+require 'bundler/gem_tasks'
 
-gemspec
-
-def dev_gem(name, path: nil, github: nil)
-  path ||= File.join('..', name)
-  github ||= "#{name.include?('poise') ? 'poise' : 'coderanger'}/#{name}"
-  github = "#{github}/#{name}" unless github.include?('/')
-  path = File.expand_path(File.join('..', path), __FILE__)
-  if File.exist?(path)
-    gem name, path: path
-  else
-    gem name, github: github
-  end
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = [].tap do |a|
+    a.push('--color')
+    a.push('--format Fuubar')
+  end.join(' ')
 end
 
-dev_gem 'halite'
+desc 'Run all tests'
+task :test => [:spec]
+
+task :default => [:test]
