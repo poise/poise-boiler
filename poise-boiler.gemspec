@@ -35,31 +35,33 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w{lib}
 
   # Development gems
-  spec.add_dependency 'rake', '~> 10.4.2'
-  spec.add_dependency 'pry'
-  spec.add_dependency 'travis'
+  spec.add_dependency 'rake', '~> 10.4'
+  spec.add_dependency 'travis', '~> 1.7'
+  spec.add_dependency 'yard', '~> 0.8'
+  spec.add_dependency 'yard-classmethods', '~> 1.0'
+  spec.add_dependency 'pry' # Travis depends on old-ass pry, see https://github.com/travis-ci/travis.rb/issues/245
 
   # Test gems
-  spec.add_dependency 'rspec', '~> 3.2.0'
-  spec.add_dependency 'rspec-its', '~> 1.2.0'
-  spec.add_dependency 'chefspec', '~> 4.2.0'
-  spec.add_dependency 'fuubar', '~> 2.0.0'
-  spec.add_dependency 'simplecov', '~> 0.9.1'
-  spec.add_dependency 'foodcritic'
+  spec.add_dependency 'rspec', '~> 3.2'
+  spec.add_dependency 'rspec-its', '~> 1.2'
+  spec.add_dependency 'chefspec', '~> 4.2'
+  spec.add_dependency 'fuubar', '~> 2.0'
+  spec.add_dependency 'simplecov', '~> 0.9'
+  spec.add_dependency 'foodcritic', '~> 4.0'
 
   # Integration gems
-  spec.add_dependency 'test-kitchen', '~> 1.3.1'
+  spec.add_dependency 'test-kitchen', '~> 1.3'
   spec.add_dependency 'kitchen-vagrant'
   spec.add_dependency 'vagrant-wrapper'
   spec.add_dependency 'kitchen-docker'
   spec.add_dependency 'kitchen-sync'
-  spec.add_dependency 'berkshelf'
+  spec.add_dependency 'berkshelf', '~> 3.2'
 
   # Travis gems
   spec.add_dependency 'codeclimate-test-reporter'
   spec.add_dependency 'codecov'
 
   # Development dependencies (yo dawg)
-  spec.add_development_dependency 'mixlib-shellout'
-  spec.add_development_dependency 'halite' # This is a circular dependency
+  spec.add_development_dependency 'mixlib-shellout', '~> 2.0'
+  spec.add_development_dependency 'halite', '~> 1.0' # This is a circular dependency
 end
