@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+require 'poise_boiler/kitchen'
+
 module PoiseBoiler
   def self.include_halite_spec_helper
     @include_halite_spec_helper.nil? ? true : @include_halite_spec_helper
