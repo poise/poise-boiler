@@ -35,7 +35,7 @@ module PoiseBoiler
     # Return a YAML string suitable for inclusion in a .kitchen.yml config. This
     # will include the standard Poise/Halite boilerplate and some default values.
     #
-    # @param platforms [String, Array<String>] Name(s) of platforms to use by default. See PLATFORM_ALIASES for aliases.
+    # @param platforms [String, Array<String>] Name(s) of platforms to use by default.
     # @see PoiseBoiler::Kitchen::PLATFORM_ALIASES
     # @example .kitchen.yml
     #   #<% require 'poise_boiler' %>
