@@ -30,6 +30,7 @@ module PoiseBoilerHelper
   let(:temp_path) do |example|
     example.metadata[:poise_boiler_temp_path]
   end
+  let(:_environment) { Hash.new }
 
   module ClassMethods
     def command(cmd=nil, options={}, &block)
@@ -41,7 +42,7 @@ module PoiseBoilerHelper
             cwd: temp_path,
             environment: {
               'BUNDLE_GEMFILE' => File.expand_path('../../Gemfile', __FILE__),
-            },
+            }.merge(_environment),
           }.merge(options),
         ).tap do |cmd|
           cmd.run_command
@@ -56,6 +57,14 @@ module PoiseBoilerHelper
         full_path = File.join(temp_path, path)
         FileUtils.mkdir_p(File.dirname(full_path))
         IO.write(full_path, content)
+      end
+    end
+
+    def environment(variables)
+      before do
+        variables.each do |key, value|
+          _environment[key.to_s] = value.to_s
+        end
       end
     end
 
