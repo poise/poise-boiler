@@ -18,6 +18,7 @@ require 'spec_helper'
 require 'chef/version'
 
 describe 'poise_boiler/kitchen' do
+    environment SPEC_BLOCK_CI: true
     file '.kitchen.yml', <<-EOH
 ---
 #<% require 'poise_boiler' %>
@@ -30,7 +31,7 @@ EOH
   context 'with defaults' do
     context 'kitchen list' do
       command 'kitchen list'
-      its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+      its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
     end # /context kitchen list
 
     context 'kitchen diagnose' do
@@ -51,10 +52,10 @@ suites:
 - name: default
 EOH
     command 'kitchen list'
-    its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-ubuntu-1204\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-centos-65\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-centos-7\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-ubuntu-1204\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-centos-65\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-centos-7\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
   end # /context with a platform alias
 
   context 'with $CHEF_VERSION set' do
@@ -66,7 +67,7 @@ EOH
 
   context 'with $CI set' do
     command 'kitchen diagnose'
-    environment CI: true
+    environment CI: true, SPEC_BLOCK_CI: false
     its(:stdout) { is_expected.to match(%r{- curl -L https://chef.io/chef/install.sh | bash -s -- -v #{Chef::VERSION}$}) }
     its(:stdout) { is_expected.to include("require_chef_omnibus: #{Chef::VERSION}") }
   end # /context with $CI set
@@ -85,7 +86,7 @@ suites:
 - name: default
 EOH
     command 'kitchen list'
-    its(:stdout) { is_expected.to match(/default-gentoo\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-arch\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-gentoo\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-arch\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
   end # /context with a platform override
 end
