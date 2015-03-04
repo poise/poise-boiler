@@ -40,7 +40,7 @@ module PoiseBoiler
     # @example .kitchen.yml
     #   #<% require 'poise_boiler' %>
     #   <%= PoiseBoiler.kitchen %>
-    def self.kitchen(platforms:)
+    def self.kitchen(platforms: 'ubuntu-14.04')
       chef_version = ENV['CHEF_VERSION'] || if ENV['CI']
         # If we are in CI and there isn't a specific override, lock TK to use the same version of Chef as the Gemfile.
         require 'chef/version'
