@@ -24,4 +24,10 @@ module PoiseBoiler
   def self.include_halite_spec_helper=(val)
     @include_halite_spec_helper = val
   end
+
+  # (see PoiseBoiler::Kitchen.kitchen)
+  def self.kitchen(platforms: 'ubuntu-14.04')
+    # Alias in a top-level namespace to reduce typing.
+    Kitchen.kitchen(platforms: platforms)
+  end
 end

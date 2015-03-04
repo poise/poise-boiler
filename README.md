@@ -46,6 +46,50 @@ and a `spec` task to run unit tests.
 require 'poise_boiler/rakefile'
 ```
 
+## `.kitchen.yml`
+
+The `.kitchen.yml` helper sets up a default driver and default values for
+platforms and chef versions (used by `knife-travis`).
+
+```
+---
+#<% require 'poise_boiler' %>
+<%= PoiseBoiler.kitchen %>
+
+suites:
+- name: default
+  run_list:
+  - recipe[mycook]
+```
+
+You can also quickly customize the platforms using platform aliases:
+
+```
+<%= PoiseBoiler.kitchen(platforms: 'ubuntu') %>
+```
+
+You can always redefine a top-level key that has a default setting as well:
+
+```
+#<% require 'poise_boiler' %>
+<%= PoiseBoiler.kitchen %>
+
+platforms:
+- name: arch
+
+suites:
+- name: default
+  run_list:
+  - recipe[mycook]
+```
+
+### Available Aliases
+
+* `ubuntu` – ubuntu-12.04, ubuntu-14.04
+* `rhel` – centos-6.5, ubuntu-7
+* `centos` – rhel
+* `linux` – ubuntu, rhel
+
 ## License
 
 Copyright 2015, Noah Kantrowitz
