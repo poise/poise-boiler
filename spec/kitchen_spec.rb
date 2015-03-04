@@ -17,7 +17,6 @@
 require 'spec_helper'
 
 describe 'poise_boiler/kitchen', :focus do
-  context 'with defaults' do
     file '.kitchen.yml', <<-EOH
 ---
 #<% require 'poise_boiler' %>
@@ -26,10 +25,19 @@ describe 'poise_boiler/kitchen', :focus do
 suites:
 - name: default
 EOH
+
+  context 'with defaults' do
     context 'kitchen list' do
       command 'kitchen list'
       its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
     end # /context kitchen list
+
+    context 'kitchen diagnose' do
+      command 'kitchen diagnose'
+      its(:stdout) { is_expected.to match(%r{- curl -L https://chef.io/chef/install.sh | bash -s --$}) }
+      its(:stdout) { is_expected.to include('/opt/chef/embedded/bin/gem install thor busser busser-serverspec serverspec') }
+      its(:stdout) { is_expected.to include('require_chef_omnibus: latest') }
+    end # /context kitchen diagnose
   end # /context with defaults
 
   context 'with a platform alias' do
@@ -41,12 +49,17 @@ EOH
 suites:
 - name: default
 EOH
-    context 'kitchen list' do
-      command 'kitchen list'
-      its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-      its(:stdout) { is_expected.to match(/default-ubuntu-1204\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-      its(:stdout) { is_expected.to match(/default-centos-65\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-      its(:stdout) { is_expected.to match(/default-centos-7\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
-    end # /context kitchen list
+    command 'kitchen list'
+    its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-ubuntu-1204\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-centos-65\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-centos-7\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
   end # /context with a platform alias
+
+  context 'with CHEF_VERSION set' do
+    command 'kitchen diagnose'
+    environment CHEF_VERSION: 12
+    its(:stdout) { is_expected.to match(%r{- curl -L https://chef.io/chef/install.sh | bash -s -- -v 12$}) }
+    its(:stdout) { is_expected.to include("require_chef_omnibus: '12'") }
+  end # /context with CHEF_VERSION set
 end
