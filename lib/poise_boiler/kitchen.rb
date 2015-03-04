@@ -48,7 +48,7 @@ module PoiseBoiler
       end
       {
         'driver' => {
-          'name' => 'vagrant',
+          'name' => (ENV['CI'] ? 'dummy' : 'vagrant'),
           'require_chef_omnibus' => chef_version || 'latest',
           'provision_command' => [
             # Run some installs at provision so they are cached in the image.
