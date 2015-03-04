@@ -17,17 +17,28 @@
 require 'poise_boiler/kitchen'
 
 module PoiseBoiler
-  def self.include_halite_spec_helper
-    @include_halite_spec_helper.nil? ? true : @include_halite_spec_helper
-  end
+  class << self
+    # @!attribute include_halite_spec_helper
+    # Enable/disable Halite::SpecHelper when configuring RSpec.
+    #
+    # @since 1.0.0
+    # @return [Boolean] Include/don't include Halite::SpecHelper.
+    # @example
+    #   require 'poise_boiler'
+    #   PoiseBoiler.include_halite_spec_helper = false
+    #   require 'poise_boiler/spec_helper'
+    def include_halite_spec_helper
+      defined?(@include_halite_spec_helper) ? @include_halite_spec_helper : true
+    end
 
-  def self.include_halite_spec_helper=(val)
-    @include_halite_spec_helper = val
-  end
+    def include_halite_spec_helper=(val)
+      @include_halite_spec_helper = val
+    end
 
-  # (see PoiseBoiler::Kitchen.kitchen)
-  def self.kitchen(platforms: 'ubuntu-14.04')
-    # Alias in a top-level namespace to reduce typing.
-    Kitchen.kitchen(platforms: platforms)
+    # (see PoiseBoiler::Kitchen.kitchen)
+    def kitchen(platforms: 'ubuntu-14.04')
+      # Alias in a top-level namespace to reduce typing.
+      Kitchen.kitchen(platforms: platforms)
+    end
   end
 end
