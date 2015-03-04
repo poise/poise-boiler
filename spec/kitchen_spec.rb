@@ -17,7 +17,7 @@
 require 'spec_helper'
 require 'chef/version'
 
-describe 'poise_boiler/kitchen', :focus do
+describe 'poise_boiler/kitchen' do
     file '.kitchen.yml', <<-EOH
 ---
 #<% require 'poise_boiler' %>
