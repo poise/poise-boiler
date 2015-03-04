@@ -15,6 +15,7 @@
 #
 
 require 'spec_helper'
+require 'chef/version'
 
 describe 'poise_boiler/kitchen', :focus do
     file '.kitchen.yml', <<-EOH
@@ -56,10 +57,35 @@ EOH
     its(:stdout) { is_expected.to match(/default-centos-7\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
   end # /context with a platform alias
 
-  context 'with CHEF_VERSION set' do
+  context 'with $CHEF_VERSION set' do
     command 'kitchen diagnose'
     environment CHEF_VERSION: 12
     its(:stdout) { is_expected.to match(%r{- curl -L https://chef.io/chef/install.sh | bash -s -- -v 12$}) }
     its(:stdout) { is_expected.to include("require_chef_omnibus: '12'") }
-  end # /context with CHEF_VERSION set
+  end # /context with $CHEF_VERSION set
+
+  context 'with $CI set' do
+    command 'kitchen diagnose'
+    environment CI: true
+    its(:stdout) { is_expected.to match(%r{- curl -L https://chef.io/chef/install.sh | bash -s -- -v #{Chef::VERSION}$}) }
+    its(:stdout) { is_expected.to include("require_chef_omnibus: #{Chef::VERSION}") }
+  end # /context with $CI set
+
+  context 'with a platform override' do
+    file '.kitchen.yml', <<-EOH
+---
+#<% require 'poise_boiler' %>
+<%= PoiseBoiler.kitchen %>
+
+platforms:
+- name: gentoo
+- name: arch
+
+suites:
+- name: default
+EOH
+    command 'kitchen list'
+    its(:stdout) { is_expected.to match(/default-gentoo\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-arch\s+Vagrant\s+ChefSolo\s+<Not Created>/) }
+  end # /context with a platform override
 end
