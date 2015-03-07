@@ -44,6 +44,7 @@ Gem::Specification.new do |spec|
   # Test gems
   spec.add_dependency 'rspec', '~> 3.2'
   spec.add_dependency 'rspec-its', '~> 1.2'
+  spec.add_dependency 'rspec-command', '~> 1.0'
   spec.add_dependency 'chefspec', '~> 4.2'
   spec.add_dependency 'fuubar', '~> 2.0'
   spec.add_dependency 'simplecov', '~> 0.9'

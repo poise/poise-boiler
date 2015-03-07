@@ -16,66 +16,8 @@
 
 require 'rspec'
 require 'rspec/its'
-require 'mixlib/shellout'
+require 'rspec_command'
 require 'poise_boiler'
-
-module PoiseBoilerHelper
-  extend RSpec::SharedContext
-  around do |example|
-    Dir.mktmpdir('poise_boiler_test') do |path|
-      example.metadata[:poise_boiler_temp_path] = path
-      example.run
-    end
-  end
-  let(:temp_path) do |example|
-    example.metadata[:poise_boiler_temp_path]
-  end
-  let(:_environment) { Hash.new }
-
-  module ClassMethods
-    def command(cmd=nil, options={}, &block)
-      subject do
-        cmd = block.call if block
-        Mixlib::ShellOut.new(
-          "bundle exec #{cmd}",
-          {
-            cwd: temp_path,
-            environment: {
-              'BUNDLE_GEMFILE' => File.expand_path('../../Gemfile', __FILE__),
-            }.merge(_environment),
-          }.merge(options),
-        ).tap do |cmd|
-          cmd.run_command
-          cmd.error!
-        end
-      end
-    end
-
-    def file(path, content=nil, &block)
-      before do
-        content = block.call if block
-        full_path = File.join(temp_path, path)
-        FileUtils.mkdir_p(File.dirname(full_path))
-        IO.write(full_path, content)
-      end
-    end
-
-    def environment(variables)
-      before do
-        variables.each do |key, value|
-          _environment[key.to_s] = value.to_s
-        end
-      end
-    end
-
-    def included(klass)
-      super
-      klass.extend ClassMethods
-    end
-  end
-
-  extend ClassMethods
-end
 
 RSpec.configure do |config|
   # Basic configuraiton
@@ -88,5 +30,5 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-  config.include PoiseBoilerHelper
+  config.include RSpecCommand
 end
