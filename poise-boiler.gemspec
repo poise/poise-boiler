@@ -44,7 +44,6 @@ Gem::Specification.new do |spec|
   # Test gems
   spec.add_dependency 'rspec', '~> 3.2'
   spec.add_dependency 'rspec-its', '~> 1.2'
-  spec.add_dependency 'rspec-command', '~> 1.0'
   spec.add_dependency 'chefspec', '~> 4.2'
   spec.add_dependency 'fuubar', '~> 2.0'
   spec.add_dependency 'simplecov', '~> 0.9'
@@ -63,6 +62,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'codecov'
 
   # Development dependencies (yo dawg)
-  spec.add_development_dependency 'mixlib-shellout', '~> 2.0'
   spec.add_development_dependency 'halite', '~> 1.0' # This is a circular dependency
+  spec.add_development_dependency 'rspec-command', '~> 1.0'
 end
