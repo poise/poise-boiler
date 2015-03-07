@@ -31,4 +31,3 @@ def dev_gem(name, path: nil, github: nil)
 end
 
 dev_gem 'halite'
-dev_gem 'yard-classmethods'
