@@ -14,24 +14,17 @@
 # limitations under the License.
 #
 
-require 'rake'
-require 'rspec'
-require 'rspec/its'
-require 'rspec_command'
-require 'poise_boiler'
+require 'halite/helper_base'
 
 
-RSpec.configure do |config|
-  # Basic configuraiton
-  config.run_all_when_everything_filtered = true
-  config.filter_run(:focus)
+module PoiseBoiler
+  class Rake < Halite::HelperBase
+    autoload :Badges, 'poise_boiler/rake/badges'
+    autoload :Core, 'poise_boiler/rake/core'
 
-  # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = 'random'
-
-  config.include RSpecCommand
-  config.include RSpecCommand::Rake
+    def install(*args)
+      Core.install(*args)
+      Badges.install(*args)
+    end
+  end
 end

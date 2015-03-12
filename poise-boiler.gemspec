@@ -35,10 +35,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w{lib}
 
   # Development gems
+  spec.add_dependency 'addressable', '~> 2.3'
   spec.add_dependency 'rake', '~> 10.4'
   spec.add_dependency 'travis', '~> 1.7'
   spec.add_dependency 'yard', '~> 0.8'
   spec.add_dependency 'yard-classmethods', '~> 1.0'
+  spec.add_dependency 'halite', '~> 1.0' # This is a circular dependency
+  spec.add_dependency 'mixlib-shellout', '~> 2.0'
   spec.add_dependency 'pry' # Travis depends on old-ass pry, see https://github.com/travis-ci/travis.rb/issues/245
 
   # Test gems
@@ -58,10 +61,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'berkshelf', '~> 3.2'
 
   # Travis gems
-  spec.add_dependency 'codeclimate-test-reporter'
-  spec.add_dependency 'codecov'
+  spec.add_dependency 'codeclimate-test-reporter', '~> 0.4'
+  spec.add_dependency 'codecov', '~> 0.0', '>= 0.0.2'
 
   # Development dependencies (yo dawg)
-  spec.add_development_dependency 'halite', '~> 1.0' # This is a circular dependency
   spec.add_development_dependency 'rspec-command', '~> 1.0'
 end

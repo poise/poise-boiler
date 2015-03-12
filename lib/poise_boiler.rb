@@ -16,7 +16,10 @@
 
 require 'poise_boiler/kitchen'
 
+
 module PoiseBoiler
+  autoload :Rake, 'poise_boiler/rake'
+
   class << self
     # @!attribute include_halite_spec_helper
     # Enable/disable Halite::SpecHelper when configuring RSpec.
