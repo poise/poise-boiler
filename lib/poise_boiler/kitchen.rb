@@ -22,6 +22,7 @@ module PoiseBoiler
   #
   # @since 1.0.0
   module Kitchen
+    extend self
     # Shorthand names for kitchen platforms.
     #
     # @see PoiseBoiler::Kitchen.kitchen
@@ -40,7 +41,7 @@ module PoiseBoiler
     # @example .kitchen.yml
     #   #<% require 'poise_boiler' %>
     #   <%= PoiseBoiler.kitchen %>
-    def self.kitchen(platforms: 'ubuntu-14.04')
+    def kitchen(platforms: 'ubuntu-14.04')
       # SPEC_BLOCK_CI is used to force non-CI behavior inside tests even though CI is globally true because we are on Travis
       chef_version = ENV['CHEF_VERSION'] || if ENV['CI'] == 'true' && ENV['SPEC_BLOCK_CI'] != 'true'
         # If we are in CI and there isn't a specific override, lock TK to use the same version of Chef as the Gemfile.
@@ -67,7 +68,7 @@ module PoiseBoiler
     private
 
     # Expand aliases from PLATFORM_ALIASES.
-    def self.expand_kitchen_platforms(platforms)
+    def expand_kitchen_platforms(platforms)
       platforms = Array(platforms)
       last_platforms = []
       while platforms != last_platforms
