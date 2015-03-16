@@ -60,7 +60,7 @@ module PoiseBoiler
             "env GEM_HOME=/tmp/busser/gems GEM_PATH=/tmp/busser/gems GEM_CACHE=/tmp/busser/gems/cache /opt/chef/embedded/bin/gem install thor busser busser-serverspec serverspec",
           ],
         },
-        'platforms' => expand_kitchen_platforms(platforms).map {|p| {'name' => p} },
+        'platforms' => expand_kitchen_platforms(platforms).map {|p| {'name' => p, 'run_list' => platform_run_list(p)} },
         'chef_versions' => %w{11.16 11.18 11 12},
       }.to_yaml.gsub(/---[ \n]/, '')
     end
@@ -76,6 +76,18 @@ module PoiseBoiler
         platforms = platforms.map {|p| PLATFORM_ALIASES[p] || p}.flatten
       end
       platforms
+    end
+
+    # Return the platform-level run list for a given platform.
+    #
+    # @param platform [String] Platform name.
+    # @return [Array<String>]
+    def platform_run_list(platform)
+      if platform.start_with?('debian') || platform.start_with?('ubuntu')
+        %w{apt}
+      else
+        []
+      end
     end
   end
 end
