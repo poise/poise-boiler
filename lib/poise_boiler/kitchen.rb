@@ -49,6 +49,7 @@ module PoiseBoiler
         Chef::VERSION
       end
       {
+        'chef_versions' => %w{12},
         'driver' => {
           'name' => (ENV['TRAVIS'] == 'true' ? 'dummy' : 'vagrant'),
           'require_chef_omnibus' => chef_version || 'latest',
@@ -61,7 +62,6 @@ module PoiseBoiler
           ],
         },
         'platforms' => expand_kitchen_platforms(platforms).map {|p| {'name' => p, 'run_list' => platform_run_list(p)} },
-        'chef_versions' => %w{11.16 11.18 11 12},
       }.to_yaml.gsub(/---[ \n]/, '')
     end
 
