@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-describe 'poise_boiler/rakefile' do
+describe 'poise_boiler/rake' do
   file 'Rakefile', 'require "poise_boiler/rakefile"'
   file 'test.gemspec', <<-EOH
 Gem::Specification.new do |spec|

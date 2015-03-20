@@ -16,7 +16,7 @@
 
 require 'spec_helper'
 
-describe PoiseBoiler::Rake::Badges do
+describe PoiseBoiler::Helpers::Rake::Badges do
   describe '#detect_github' do
     let(:instance) { described_class.new(gem_name: '', base: '') }
     subject { instance.send(:detect_github) }

@@ -14,5 +14,5 @@
 # limitations under the License.
 #
 
+# This is just an alias for rake.rb
 require 'poise_boiler/rake'
-::PoiseBoiler::Rake.install

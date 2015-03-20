@@ -14,17 +14,5 @@
 # limitations under the License.
 #
 
-require 'halite/helper_base'
-
-
-module PoiseBoiler
-  class Rake < Halite::HelperBase
-    autoload :Badges, 'poise_boiler/rake/badges'
-    autoload :Core, 'poise_boiler/rake/core'
-
-    def install(*args)
-      Core.install(*args)
-      Badges.install(*args)
-    end
-  end
-end
+require 'poise_boiler/helpers/rake'
+::PoiseBoiler::Helpers::Rake.install

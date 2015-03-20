@@ -14,15 +14,13 @@
 # limitations under the License.
 #
 
-require 'poise_boiler/kitchen'
-
 
 module PoiseBoiler
-  autoload :Helpers, 'poise_boiler/helpers'
-
-  # (see PoiseBoiler::Kitchen#kitchen)
-  def self.kitchen(platforms: 'ubuntu-14.04')
-    # Alias in a top-level namespace to reduce typing.
-    Kitchen.kitchen(platforms: platforms)
+  # Module for helper classes of various forms.
+  #
+  # @since 1.0.0
+  module Helpers
+    autoload :Rake, 'poise_boiler/helpers/rake'
+    autoload :SpecHelper, 'poise_boiler/helpers/spec_helper'
   end
 end

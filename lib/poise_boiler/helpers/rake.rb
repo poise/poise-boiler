@@ -14,15 +14,19 @@
 # limitations under the License.
 #
 
-require 'poise_boiler/kitchen'
+require 'halite/helper_base'
 
 
 module PoiseBoiler
-  autoload :Helpers, 'poise_boiler/helpers'
+  module Helpers
+    class Rake < Halite::HelperBase
+      autoload :Badges, 'poise_boiler/helpers/rake/badges'
+      autoload :Core, 'poise_boiler/helpers/rake/core'
 
-  # (see PoiseBoiler::Kitchen#kitchen)
-  def self.kitchen(platforms: 'ubuntu-14.04')
-    # Alias in a top-level namespace to reduce typing.
-    Kitchen.kitchen(platforms: platforms)
+      def install(*args)
+        Core.install(*args)
+        Badges.install(*args)
+      end
+    end
   end
 end
