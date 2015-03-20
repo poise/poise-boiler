@@ -62,7 +62,7 @@ module PoiseBoiler
 
           unless options['no_halite']
             require 'halite/spec_helper'
-            config.include Halite::SpecHelper(gemspec)
+            config.include Halite::SpecHelper(gem_name ? gemspec : nil)
           end
         end
       end # /def install
