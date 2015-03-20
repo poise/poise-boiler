@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+
 module PoiseBoiler
   # Base class for poise-boiler errors.
   #

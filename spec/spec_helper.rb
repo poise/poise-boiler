@@ -20,7 +20,6 @@ require 'rspec/its'
 require 'rspec_command'
 require 'poise_boiler'
 
-
 RSpec.configure do |config|
   # Basic configuraiton
   config.run_all_when_everything_filtered = true
