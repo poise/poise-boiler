@@ -73,7 +73,7 @@ module PoiseBoiler
       last_platforms = []
       while platforms != last_platforms
         last_platforms = platforms
-        platforms = platforms.map {|p| PLATFORM_ALIASES[p] || p}.flatten
+        platforms = platforms.map {|p| PLATFORM_ALIASES[p] || p}.flatten.uniq
       end
       platforms
     end
