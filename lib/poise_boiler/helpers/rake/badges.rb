@@ -22,18 +22,22 @@ require 'mixlib/shellout'
 
 module PoiseBoiler
   module Helpers
-    # Helper module for a Rakefile to add a `badges` command. This command will
-    # print out README badges suitable for use on GitHub.
-    #
-    # @since 1.0.0
-    # @example Installing tasks
-    #   require 'poise_boiler/helpers/rake/badges'
-    #   PoiseBoiler::Helpers::Rake::Badges.install
-    # @example Creating badges
-    #   $ rake badges >> README.md
     class Rake
+      # Helper for a Rakefile to add a `badges` command. This command will print
+      # out README badges suitable for use on GitHub.
+      #
+      # @since 1.0.0
+      # @example Installing tasks
+      #   require 'poise_boiler/helpers/rake/badges'
+      #   PoiseBoiler::Helpers::Rake::Badges.install
+      # @example Creating badges
+      #   $ rake badges >> README.md
       class Badges < Halite::HelperBase
+        # Install the `badges` rake task.
+        #
+        # @return [void]
         def install
+          # Delayed so that Rake doesn't need to be loaded to run this file.
           extend ::Rake::DSL
 
           desc "Generate README badges for #{gemspec.name}"

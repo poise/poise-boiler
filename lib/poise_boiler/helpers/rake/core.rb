@@ -20,8 +20,21 @@ require 'halite/helper_base'
 module PoiseBoiler
   module Helpers
     class Rake
+      # Helper for a Rakefile to install some standard tasks used by most
+      # Poise/Halite-style gems.
+      #
+      # @since 1.0.0
+      # @example Installing tasks
+      #   require 'poise_boiler/helpers/rake/core'
+      #   PoiseBoiler::Helpers::Rake::Core.install
+      # @example Running tests
+      #   $ rake test
       class Core < Halite::HelperBase
+        # Install the rake tasks.
+        #
+        # @return [void]
         def install
+          # Delayed so that Rake doesn't need to be loaded to run this file.
           extend ::Rake::DSL
 
           # Set the default task.
