@@ -48,8 +48,6 @@ module PoiseBoiler
         require 'chef/version'
         Chef::VERSION
       end
-      # This build got yanked but travis is cranky. Remove some time after 2015-04-01.
-      chef_version = '12.1.2' if chef_version == '12.2.0'
       {
         'chef_versions' => %w{12},
         'driver' => {
