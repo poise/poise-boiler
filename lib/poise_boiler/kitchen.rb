@@ -52,7 +52,7 @@ module PoiseBoiler
         'chef_versions' => %w{12},
         'driver' => {
           'name' => (ENV['TRAVIS'] == 'true' ? 'dummy' : 'vagrant'),
-          'require_chef_omnibus' => chef_version || 'latest',
+          'require_chef_omnibus' => chef_version || true,
           'provision_command' => [
             # Run some installs at provision so they are cached in the image.
             # Install Chef (with the correct verison).
