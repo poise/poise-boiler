@@ -47,6 +47,7 @@ module PoiseBoiler
               a << '--color'
               a << '--format Fuubar'
               a << '--backtrace' if ENV['DEBUG']
+              a << "--seed #{ENV['SEED']}" if ENV['SEED']
               a << "--tag #{args[:tag]}" if args[:tag]
               a << "--default-path test"
               a << '-I test/spec'
