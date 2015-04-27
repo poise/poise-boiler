@@ -28,7 +28,7 @@ module PoiseBoiler
     # @see PoiseBoiler::Kitchen.kitchen
     PLATFORM_ALIASES = {
       'ubuntu' => %w{ubuntu-12.04 ubuntu-14.04},
-      'rhel' => %w{centos-6.5 centos-7},
+      'rhel' => %w{centos-6 centos-7},
       'centos' => %w{rhel},
       'linux' => %w{ubuntu rhel},
     }

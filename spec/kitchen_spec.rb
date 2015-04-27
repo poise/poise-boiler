@@ -54,7 +54,7 @@ EOH
     command 'kitchen list'
     its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
     its(:stdout) { is_expected.to match(/default-ubuntu-1204\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-centos-65\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-centos-6\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
     its(:stdout) { is_expected.to match(/default-centos-7\s+(Vagrant|Dummy)\s+ChefSolo\s+<Not Created>/) }
   end # /context with a platform alias
 
