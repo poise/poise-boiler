@@ -45,7 +45,7 @@ module PoiseBoiler
           RSpec::Core::RakeTask.new(:spec, :tag) do |t, args|
             t.rspec_opts = [].tap do |a|
               a << '--color'
-              a << '--format Fuubar'
+              a << "--format #{ENV['CI'] ? 'documentation' : 'Fuubar'}"
               a << '--backtrace' if ENV['DEBUG']
               a << "--seed #{ENV['SEED']}" if ENV['SEED']
               a << "--tag #{args[:tag]}" if args[:tag]
