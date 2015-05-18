@@ -83,7 +83,7 @@ module PoiseBoiler
         def travis_timer(&block)
           begin
             start_time = time_nanoseconds(Time.now)
-            timer_id = Random::DEFAULT.bytes(8).unpack("H*")[0]
+            timer_id = '%08x' % Random.rand(0xFFFFFFFF)
             shell.say("travis_time:start:#{timer_id}")
             block.call
           ensure
