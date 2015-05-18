@@ -22,10 +22,12 @@ module PoiseBoiler
     class Rake < Halite::HelperBase
       autoload :Badges, 'poise_boiler/helpers/rake/badges'
       autoload :Core, 'poise_boiler/helpers/rake/core'
+      autoload :Travis, 'poise_boiler/helpers/rake/travis'
 
       def install(*args)
         Core.install(*args)
         Badges.install(*args)
+        Travis.install(*args)
       end
     end
   end
