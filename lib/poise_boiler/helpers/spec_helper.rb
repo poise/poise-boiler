@@ -63,6 +63,8 @@ module PoiseBoiler
           unless options['no_halite']
             require 'halite/spec_helper'
             config.include Halite::SpecHelper(gem_name ? gemspec : nil)
+            # Hide the spec helper from RSpec traces by default.
+            config.backtrace_exclusion_patterns << %r{/halite/spec_helper}
           end
         end
       end # /def install
