@@ -54,11 +54,18 @@ module PoiseBoiler
           task 'travis' do
             run_subtask('spec')
             run_subtask('chef:foodcritic')
-            run_subtask('travis:integration') if ENV['TRAVIS_SECURE_ENV_VARS']
+            run_subtask('travis:integration') if integration_tests?
           end
         end
 
         private
+
+        # Should we run integration tests?
+        #
+        # @return [Boolean]
+        def integration_tests?
+          ENV['TRAVIS_SECURE_ENV_VARS'] && !ENV['BUNDLE_GEMFILE'].to_s.include?('master')
+        end
 
         # Convert a Time object to nanoseconds since the epoch.
         #
