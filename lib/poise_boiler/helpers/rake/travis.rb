@@ -64,7 +64,7 @@ module PoiseBoiler
         #
         # @return [Boolean]
         def integration_tests?
-          ENV['TRAVIS_SECURE_ENV_VARS'] && !ENV['BUNDLE_GEMFILE'].to_s.include?('master')
+          ENV['TRAVIS_SECURE_ENV_VARS'] && !ENV['TRAVIS_SECURE_ENV_VARS'].empty? && !ENV['BUNDLE_GEMFILE'].to_s.include?('master')
         end
 
         # Convert a Time object to nanoseconds since the epoch.
