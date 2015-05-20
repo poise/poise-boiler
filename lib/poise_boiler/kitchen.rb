@@ -57,8 +57,10 @@ module PoiseBoiler
             # Run some installs at provision so they are cached in the image.
             # Install Chef (with the correct verison).
             "curl -L https://chef.io/chef/install.sh | bash -s --" + (chef_version ? " -v #{chef_version}" : '' ),
-            # Install some kitchen-related gems. Normally installed during the verify step but thats idempotent.
-            "env GEM_HOME=/tmp/busser/gems GEM_PATH=/tmp/busser/gems GEM_CACHE=/tmp/busser/gems/cache /opt/chef/embedded/bin/gem install thor busser busser-serverspec serverspec bundler",
+            # Install some kitchen-related gems. Normally installed during the verify step but that is idempotent.
+            "env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install thor busser busser-serverspec serverspec bundler",
+            # Fix directory permissions.
+            "chown -R kitchen /tmp/verifier",
           ],
         },
         'platforms' => expand_kitchen_platforms(platforms).map {|p| {'name' => p, 'run_list' => platform_run_list(p)} },
