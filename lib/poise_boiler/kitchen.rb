@@ -42,9 +42,9 @@ module PoiseBoiler
     #   #<% require 'poise_boiler' %>
     #   <%= PoiseBoiler.kitchen %>
     def kitchen(platforms: 'ubuntu-14.04')
-      # SPEC_BLOCK_CI is used to force non-CI behavior inside tests even though CI is globally true because we are on Travis
-      chef_version = ENV['CHEF_VERSION'] || if ENV['CI'] == 'true' && ENV['SPEC_BLOCK_CI'] != 'true'
-        # If we are in CI and there isn't a specific override, lock TK to use the same version of Chef as the Gemfile.
+      # SPEC_BLOCK_CI is used to force non-locking behavior inside tests.
+      chef_version = ENV['CHEF_VERSION'] || if ENV['SPEC_BLOCK_CI'] != 'true'
+        # If there isn't a specific override, lock TK to use the same version of Chef as the Gemfile.
         require 'chef/version'
         Chef::VERSION
       end
