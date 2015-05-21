@@ -45,8 +45,12 @@ module PoiseBoiler
             File.chmod(0755, './docker')
           end
 
+          file '.ssh/id_rsa' do
+            sh 'ssh-keygen -f ~/.ssh/id_rsa -b 768 -P ""'
+          end
+
           desc 'Run Test-Kitchen integration tests.'
-          task 'travis:integration' => %w{test/docker/docker.key ./docker} do
+          task 'travis:integration' => ( integration_rackspace? ? %w{.ssh/id_rsa} : %w{test/docker/docker.key ./docker} ) do
             sh './bin/kitchen test -d always'
           end
 
@@ -65,6 +69,14 @@ module PoiseBoiler
         # @return [Boolean]
         def integration_tests?
           ENV['TRAVIS_SECURE_ENV_VARS'] && !ENV['TRAVIS_SECURE_ENV_VARS'].empty? && !ENV['BUNDLE_GEMFILE'].to_s.include?('master')
+        end
+
+        # Should we set things up for Rackspace integration tests? The default
+        # is to use Docker.
+        #
+        # @return [Boolean]
+        def integration_rackspace?
+          File.exist?('.kitchen.travis.yml') && IO.read('.kitchen.travis.yml').include?('name: rackspace')
         end
 
         # Convert a Time object to nanoseconds since the epoch.
