@@ -1,18 +1,18 @@
 sudo: false
 cache: bundler
 language: ruby
+addons:
+  apt:
+    packages:
+    - libgecode-dev
 rvm:
 - "2.0"
 - "2.1"
 - "2.2"
+gemfile:
+- gemfiles/default.gemfile
+- gemfiles/master.gemfile
 env:
   global:
   - USE_SYSTEM_GECODE=true
-before_install:
-- curl -o ~/gecode.tar.gz https://poise-gecode.s3.amazonaws.com/gecode-3.7.3-ubuntu12.04-x86_64.tar.gz
-- tar xzf ~/gecode.tar.gz -C ~
-- rm ~/gecode.tar.gz
-- bundle config build.dep_selector "--with-cflags=\"-I$HOME/gecode-3.7.3/include\"
-  --with-cppflags=\"-I$HOME/gecode-3.7.3/include\" --with-ldflags=\"-L$HOME/gecode-3.7.3/lib
-  -Wl,-rpath=$HOME/gecode-3.7.3/lib\""
 script: bundle exec rake test
