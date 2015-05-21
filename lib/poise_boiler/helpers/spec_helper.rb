@@ -19,6 +19,11 @@ require 'halite/helper_base'
 
 module PoiseBoiler
   module Helpers
+    # Helper for a spec_helper.rb to configure things for the Poise workflow.
+    # This configures rspec, rspec-its, simplecov (with codeclimate and codecov
+    # if possible), and the Halite spec helper.
+    #
+    # @since 1.0.0
     class SpecHelper < Halite::HelperBase
       def install
         require 'rspec'
@@ -68,6 +73,7 @@ module PoiseBoiler
           end
         end
       end # /def install
+
     end
   end
 end

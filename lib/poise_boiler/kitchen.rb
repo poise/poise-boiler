@@ -17,6 +17,7 @@
 require 'kitchen'
 require 'kitchen-sync'
 
+
 module PoiseBoiler
   # Helpers for Test-Kitchen and .kitchen.yml configuration.
   #

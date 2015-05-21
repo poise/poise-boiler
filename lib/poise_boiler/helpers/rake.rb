@@ -19,11 +19,20 @@ require 'halite/helper_base'
 
 module PoiseBoiler
   module Helpers
+    # Helper for a Rakefile to install common tasks for the Poise workflow.
+    #
+    # @since 1.0.0
+    # @see Badges
+    # @see Core
+    # @see Travis
     class Rake < Halite::HelperBase
       autoload :Badges, 'poise_boiler/helpers/rake/badges'
       autoload :Core, 'poise_boiler/helpers/rake/core'
       autoload :Travis, 'poise_boiler/helpers/rake/travis'
 
+      # Install all rake tasks.
+      #
+      # @return [void]
       def install(*args)
         Core.install(*args)
         Badges.install(*args)

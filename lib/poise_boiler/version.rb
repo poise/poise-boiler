@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+
 module PoiseBoiler
   VERSION = '1.0.0'
 end
