@@ -57,6 +57,9 @@ module PoiseBoiler
             run_subtask('spec')
             run_subtask('chef:foodcritic')
             run_subtask('travis:integration') if integration_tests?
+            if @failed && !@failed.empty?
+              raise "Subtasks #{@failed.join(', ')} failed"
+            end
           end
         end
 
@@ -128,6 +131,7 @@ module PoiseBoiler
               task(name).invoke
               shell.say("Task #{name} succeeded.", :green)
             rescue StandardError => ex
+              (@failed ||= []) << name
               shell.say("Task #{name} failed with #{ex}:", :red)
               travis_fold "#{name}.backtrace" do
                 shell.say(ex.backtrace.map{|line| '  '+line }.join("\n"), :red)
