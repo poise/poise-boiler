@@ -37,16 +37,20 @@ module PoiseBoiler
           extend ::Rake::DSL
 
           file 'test/docker/docker.key' do
-            sh 'openssl rsa -in test/docker/docker.pem -passin env:KITCHEN_DOCKER_PASS -out test/docker/docker.key'
+            sh(*%w{openssl rsa -in test/docker/docker.pem -passin env:KITCHEN_DOCKER_PASS -out test/docker/docker.key})
           end
 
           file './docker' do
-            sh 'wget https://get.docker.io/builds/Linux/x86_64/docker-latest -O docker'
+            begin
+              sh(*%w{wget https://get.docker.io/builds/Linux/x86_64/docker-latest -O docker})
+            rescue RuntimeError
+              sh(*%w{curl https://get.docker.io/builds/Linux/x86_64/docker-latest -o docker})
+            end
             File.chmod(0755, './docker')
           end
 
           file '.ssh/id_rsa' do
-            sh 'ssh-keygen -f ~/.ssh/id_rsa -b 768 -P ""'
+            sh(*%w{ssh-keygen -f ~/.ssh/id_rsa -b 768 -P ""})
           end
 
           desc 'Run Test-Kitchen integration tests.'
