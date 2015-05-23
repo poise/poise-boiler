@@ -50,9 +50,7 @@ module PoiseBoiler
           end
 
           desc 'Run Test-Kitchen integration tests.'
-          task 'travis:integration' => ( integration_rackspace? ? %w{.ssh/id_rsa} : %w{test/docker/docker.key ./docker} ) do
-            sh './bin/kitchen test -d always'
-          end
+          task 'travis:integration' => ( integration_rackspace? ? %w{.ssh/id_rsa chef:kitchen} : %w{test/docker/docker.key ./docker chef:kitchen} )
 
           desc 'Run CI tests'
           task 'travis' do
