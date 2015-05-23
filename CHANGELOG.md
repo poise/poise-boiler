@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.2
+
+* Unbreak Rackspace integration testing support.
+
 ## v1.1.1
 
 * Don't mask errors from failed subtasks of `rake travis`.
