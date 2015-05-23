@@ -117,4 +117,22 @@ EOH
     end
     its(:exitstatus) { is_expected.to eq 0 }
   end # /context secure vars
+
+  context 'secure vars and Rackspace' do
+    file '.kitchen.travis.yml', 'name: rackspace'
+    file '.ssh/stub'
+    environment TRAVIS_SECURE_ENV_VARS: '1'
+    before do
+      _environment['HOME'] = temp_path
+    end
+
+    its(:stdout) { is_expected.to include 'Running task spec' }
+    its(:stdout) { is_expected.to include 'Running task chef:foodcritic' }
+    if (ENV['BUNDLE_GEMFILE'] || '').include?('master')
+      its(:stdout) { is_expected.to_not include 'Running task travis:integration' }
+    else
+      its(:stdout) { is_expected.to include 'Running task travis:integration' }
+    end
+    its(:exitstatus) { is_expected.to eq 0 }
+  end
 end

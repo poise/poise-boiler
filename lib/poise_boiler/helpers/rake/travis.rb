@@ -50,7 +50,9 @@ module PoiseBoiler
           end
 
           file '.ssh/id_rsa' do
-            sh(*%w{ssh-keygen -f ~/.ssh/id_rsa -b 768 -P ""})
+            # Add a zero-byte passphrase field.
+            cmd = %w{ssh-keygen -f} + [File.expand_path('~/.ssh/id_rsa')] +  %w{-b 768 -P} + ['']
+            sh(*cmd)
           end
 
           desc 'Run Test-Kitchen integration tests.'
