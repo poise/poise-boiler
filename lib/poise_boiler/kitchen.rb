@@ -64,6 +64,9 @@ module PoiseBoiler
             "chown -R kitchen /tmp/verifier",
           ],
         },
+        'transport' => {
+          'name' => 'sftp',
+        },
         'platforms' => expand_kitchen_platforms(platforms).map {|p| {'name' => p, 'run_list' => platform_run_list(p)} },
       }.to_yaml.gsub(/---[ \n]/, '')
     end
