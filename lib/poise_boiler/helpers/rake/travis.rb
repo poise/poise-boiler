@@ -60,6 +60,7 @@ module PoiseBoiler
 
           desc 'Run CI tests'
           task 'travis' do
+            ENV['POISE_MASTER_BUILD'] = 'true' if master_build?
             run_subtask('spec')
             run_subtask('chef:foodcritic')
             run_subtask('travis:integration') if integration_tests?
@@ -71,11 +72,18 @@ module PoiseBoiler
 
         private
 
+        # Is this a master build?
+        #
+        # @return [Boolean]
+        def master_build?
+          ENV['BUNDLE_GEMFILE'].to_s.include?('master.gemfile')
+        end
+
         # Should we run integration tests?
         #
         # @return [Boolean]
         def integration_tests?
-          ENV['TRAVIS_SECURE_ENV_VARS'] && !ENV['TRAVIS_SECURE_ENV_VARS'].empty? && !ENV['BUNDLE_GEMFILE'].to_s.include?('master')
+          ENV['TRAVIS_SECURE_ENV_VARS'] == 'true'
         end
 
         # Should we set things up for Rackspace integration tests? The default

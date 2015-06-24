@@ -49,6 +49,14 @@ module PoiseBoiler
         require 'chef/version'
         Chef::VERSION
       end
+      install_arguments = if ENV['POISE_MASTER_BUILD']
+        # Use today's date as an ignored param to force the layer to rebuild.
+        " -n -- #{Date.today}"
+      elsif chef_version
+        " -v #{chef_version}"
+      else
+        ''
+      end
       {
         'chef_versions' => %w{12},
         'driver' => {
@@ -57,7 +65,7 @@ module PoiseBoiler
           'provision_command' => [
             # Run some installs at provision so they are cached in the image.
             # Install Chef (with the correct verison).
-            "curl -L https://chef.io/chef/install.sh | bash -s --" + (chef_version ? " -v #{chef_version}" : '' ),
+            "curl -L https://chef.io/chef/install.sh | bash -s --#{install_arguments}",
             # Install some kitchen-related gems. Normally installed during the verify step but that is idempotent.
             "env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install thor busser busser-serverspec serverspec bundler",
             # Fix directory permissions.
