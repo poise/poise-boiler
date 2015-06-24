@@ -41,7 +41,7 @@ EOH
   file 'README.md'
 
   context 'no secure vars' do
-    environment TRAVIS_SECURE_ENV_VARS: ''
+    environment TRAVIS_SECURE_ENV_VARS: 'false'
 
     its(:stdout) { is_expected.to include 'Running task spec' }
     its(:stdout) { is_expected.to include 'Running task chef:foodcritic' }
