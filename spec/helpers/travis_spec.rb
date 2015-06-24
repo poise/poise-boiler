@@ -110,11 +110,7 @@ EOH
 
     its(:stdout) { is_expected.to include 'Running task spec' }
     its(:stdout) { is_expected.to include 'Running task chef:foodcritic' }
-    if (ENV['BUNDLE_GEMFILE'] || '').include?('master')
-      its(:stdout) { is_expected.to_not include 'Running task travis:integration' }
-    else
-      its(:stdout) { is_expected.to include 'Running task travis:integration' }
-    end
+    its(:stdout) { is_expected.to include 'Running task travis:integration' }
     its(:exitstatus) { is_expected.to eq 0 }
   end # /context secure vars
 
