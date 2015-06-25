@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.3
+
+* Use the new Test Kitchen 1.4 transport from kitchen-sync.
+* Run integration tests for master builds using Chef nightlies.
+
 ## v1.1.2
 
 * Unbreak Rackspace integration testing support.
