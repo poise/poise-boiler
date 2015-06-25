@@ -50,7 +50,7 @@ EOH
   end # /context no secure vars
 
   context 'secure vars' do
-    environment TRAVIS_SECURE_ENV_VARS: '1', KITCHEN_DOCKER_PASS: 'secret'
+    environment TRAVIS_SECURE_ENV_VARS: 'true', KITCHEN_DOCKER_PASS: 'secret'
     file 'test/docker/docker.pem', <<-EOH
 -----BEGIN RSA PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
@@ -117,7 +117,7 @@ EOH
   context 'secure vars and Rackspace' do
     file '.kitchen.travis.yml', 'name: rackspace'
     file '.ssh/stub'
-    environment TRAVIS_SECURE_ENV_VARS: '1'
+    environment TRAVIS_SECURE_ENV_VARS: 'true'
     before do
       _environment['HOME'] = temp_path
     end
