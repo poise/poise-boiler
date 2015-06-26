@@ -50,6 +50,8 @@ module PoiseBoiler
         Chef::VERSION
       end
       install_arguments = if ENV['POISE_MASTER_BUILD']
+        # Force it to use any version down below.
+        chef_version = nil
         # Use today's date as an ignored param to force the layer to rebuild.
         " -n -- #{Date.today}"
       elsif chef_version
