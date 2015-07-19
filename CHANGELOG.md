@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.4
+
+* Master integration tests use the correct Chef version.
+* Don't filter the `:focus` tag in CI. This prevents bad data in my coverage
+  graphs when I accidentally commit a focused test.
+* Only try to run the integration tests if `.kitchen.yml` exists.
+
 ## v1.1.3
 
 * Use the new Test Kitchen 1.4 transport from kitchen-sync.
