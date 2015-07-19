@@ -83,7 +83,7 @@ module PoiseBoiler
         #
         # @return [Boolean]
         def integration_tests?
-          ENV['TRAVIS_SECURE_ENV_VARS'] == 'true'
+          ENV['TRAVIS_SECURE_ENV_VARS'] == 'true' && File.exist?('.kitchen.yml')
         end
 
         # Should we set things up for Rackspace integration tests? The default
