@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.5
+
+* Workaround for broken Test Kitchen. To be reverted after the next TK release.
+
 ## v1.1.4
 
 * Master integration tests use the correct Chef version.
