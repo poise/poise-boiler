@@ -53,7 +53,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'foodcritic', '~> 4.0'
 
   # Integration gems
-  spec.add_dependency 'net-ssh', '2.9.2' # Pending https://github.com/test-kitchen/test-kitchen/pull/801
   spec.add_dependency 'test-kitchen', '~> 1.4'
   spec.add_dependency 'kitchen-vagrant'
   spec.add_dependency 'vagrant-wrapper'

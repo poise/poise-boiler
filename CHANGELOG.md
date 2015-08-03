@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.6
+
+* Revert the 1.1.5 change.
+
 ## v1.1.5
 
 * Workaround for broken Test Kitchen. To be reverted after the next TK release.
