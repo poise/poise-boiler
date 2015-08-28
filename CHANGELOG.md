@@ -3,6 +3,7 @@
 ## v1.1.6
 
 * Revert the 1.1.5 change.
+* Update download URL for Docker.
 
 ## v1.1.5
 
