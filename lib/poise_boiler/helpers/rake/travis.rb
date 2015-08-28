@@ -42,9 +42,9 @@ module PoiseBoiler
 
           file './docker' do
             begin
-              sh(*%w{wget https://get.docker.io/builds/Linux/x86_64/docker-latest -O docker})
+              sh(*%w{wget https://get.docker.com/builds/Linux/x86_64/docker-latest -O docker})
             rescue RuntimeError
-              sh(*%w{curl https://get.docker.io/builds/Linux/x86_64/docker-latest -o docker})
+              sh(*%w{curl https://get.docker.com/builds/Linux/x86_64/docker-latest -o docker})
             end
             File.chmod(0755, './docker')
           end
