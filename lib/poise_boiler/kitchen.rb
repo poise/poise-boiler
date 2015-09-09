@@ -66,8 +66,9 @@ module PoiseBoiler
           'require_chef_omnibus' => chef_version || true,
           'provision_command' => [
             # Run some installs at provision so they are cached in the image.
-            # Make sure the hostname utilitiy is installed on CentOS 7.
-            "[ -f /etc/redhat-release ] && yum -y install hostname",
+            # Make sure the hostname utilitiy is installed on CentOS 7. The
+            # ||true is for EL6 which has no hostname package. Sigh.
+            "test ! -f /etc/redhat-release || yum -y install hostname || true",
             # Install Chef (with the correct verison).
             "curl -L https://chef.io/chef/install.sh | bash -s --#{install_arguments}",
             # Install some kitchen-related gems. Normally installed during the verify step but that is idempotent.
