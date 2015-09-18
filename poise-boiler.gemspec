@@ -50,7 +50,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'chefspec', '~> 4.2'
   spec.add_dependency 'fuubar', '~> 2.0'
   spec.add_dependency 'simplecov', '~> 0.9'
-  spec.add_dependency 'foodcritic', '~> 4.0'
+  spec.add_dependency 'foodcritic', '~> 5.0'
 
   # Integration gems
   spec.add_dependency 'test-kitchen', '~> 1.4'
