@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.7
+
+* Bump foodcritic dependency for 5.0.
+* Ensure `ohai['hostname']` and friends work on CentOS 7.
+
 ## v1.1.6
 
 * Revert the 1.1.5 change.
