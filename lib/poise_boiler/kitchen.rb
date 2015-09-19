@@ -66,6 +66,9 @@ module PoiseBoiler
           'require_chef_omnibus' => chef_version || true,
           'provision_command' => [
             # Run some installs at provision so they are cached in the image.
+            # Install net-tools for netstat which is used by serverspec.
+            "test ! -f /etc/debian_version || apt-get install -y net-tools",
+            "test ! -f /etc/redhat-release || yum -y install net-tools",
             # Make sure the hostname utilitiy is installed on CentOS 7. The
             # ||true is for EL6 which has no hostname package. Sigh.
             "test ! -f /etc/redhat-release || yum -y install hostname || true",
