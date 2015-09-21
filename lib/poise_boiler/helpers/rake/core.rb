@@ -58,8 +58,10 @@ module PoiseBoiler
           task test: %i{spec}
 
           # Install gem tasks (build, upload, etc).
-          require 'bundler/gem_helper'
-          Bundler::GemHelper.install_tasks(options[:bundler] || {})
+          unless options[:no_gem]
+            require 'bundler/gem_helper'
+            Bundler::GemHelper.install_tasks(options[:bundler] || {})
+          end
 
           # Install the Halite tasks.
           require 'halite/rake_helper'

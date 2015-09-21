@@ -37,6 +37,7 @@ module PoiseBoiler
         #
         # @return [void]
         def install
+          return if options[:no_gem]
           # Delayed so that Rake doesn't need to be loaded to run this file.
           extend ::Rake::DSL
 
