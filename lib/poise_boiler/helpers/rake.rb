@@ -33,10 +33,10 @@ module PoiseBoiler
       # Install all rake tasks.
       #
       # @return [void]
-      def install(*args)
-        Core.install(*args)
-        Badges.install(*args)
-        Travis.install(*args)
+      def install
+        Core.install(gem_name: gem_name, base: base, **options)
+        Badges.install(gem_name: gem_name, base: base, **options)
+        Travis.install(gem_name: gem_name, base: base, **options)
       end
     end
   end
