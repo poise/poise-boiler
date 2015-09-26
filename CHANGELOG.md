@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.8
+
+* Don't install documentation for busser gems.
+* Install net-tools for common platforms for serverspec.
+* Improve `no_gem` mode for spec_helper.
+
 ## v1.1.7
 
 * Bump foodcritic dependency for 5.0.
