@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.9
+
+* Lock `ridley` dependency pending upstream fixes in a few days.
+
 ## v1.1.8
 
 * Don't install documentation for busser gems.
