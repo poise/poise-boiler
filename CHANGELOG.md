@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.10
+
+* Better fix for faraday gzip issues.
+
 ## v1.1.9
 
 * Lock `ridley` dependency pending upstream fixes in a few days.

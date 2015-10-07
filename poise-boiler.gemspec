@@ -58,10 +58,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'vagrant-wrapper'
   spec.add_dependency 'kitchen-docker'
   spec.add_dependency 'kitchen-sync', '~> 1.1'
-  spec.add_dependency 'berkshelf', '~> 3.2'
-  # Lock to this specific version of Ridley pending upstream releases to deal
-  # with the gzip middleware changes.
-  spec.add_dependency 'ridley', '4.2.0'
+  spec.add_dependency 'berkshelf', '~> 4.0'
 
   # Travis gems
   spec.add_dependency 'codeclimate-test-reporter', '~> 0.4'
