@@ -29,6 +29,8 @@ module PoiseBoiler
         require 'rspec'
         require 'rspec/its'
         require 'simplecov'
+        require 'pry'
+        require 'pry-byebug'
 
         # Check for coverage stuffs
         formatters = []
