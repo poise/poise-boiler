@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   # Development gems
   spec.add_dependency 'addressable', '~> 2.3'
   spec.add_dependency 'rake', '~> 10.4'
-  spec.add_dependency 'travis', '~> 1.7'
+  # spec.add_dependency 'travis', '~> 1.8'
   spec.add_dependency 'yard', '~> 0.8'
   spec.add_dependency 'yard-classmethods', '~> 1.0'
   spec.add_dependency 'halite', '~> 1.0' # This is a circular dependency
