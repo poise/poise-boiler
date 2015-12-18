@@ -32,6 +32,8 @@ module PoiseBoiler
       'rhel' => %w{centos-6 centos-7},
       'centos' => %w{rhel},
       'linux' => %w{ubuntu rhel},
+      'unix' => %w{linux freebsd},
+      'all' => %{unix windows},
     }
 
     # Return a YAML string suitable for inclusion in a .kitchen.yml config. This
@@ -42,7 +44,14 @@ module PoiseBoiler
     # @example .kitchen.yml
     #   #<% require 'poise_boiler' %>
     #   <%= PoiseBoiler.kitchen %>
-    def kitchen(platforms: 'ubuntu-14.04')
+    def kitchen(platforms: 'ubuntu-14.04', root: nil)
+      # Figure out the directory that contains the kitchen.yml.
+      root ||= if caller.find {|line| !line.start_with?(File.expand_path('../..', __FILE__)) } =~ /^(.*?):\d+:in/
+        File.expand_path('..', $1)
+      else
+        # ¯\_(ツ)_/¯
+        Dir.pwd
+      end
       # SPEC_BLOCK_CI is used to force non-locking behavior inside tests.
       chef_version = ENV['CHEF_VERSION'] || if ENV['SPEC_BLOCK_CI'] != 'true'
         # If there isn't a specific override, lock TK to use the same version of Chef as the Gemfile.
@@ -59,11 +68,23 @@ module PoiseBoiler
       else
         ''
       end
+      docker_enabled = File.exist?(File.expand_path('test/docker/docker.key', root))
       {
         'chef_versions' => %w{12},
         'driver' => {
-          'name' => (ENV['TRAVIS'] == 'true' ? 'dummy' : 'vagrant'),
+          'name' => (docker_enabled ? 'docker' : ENV['TRAVIS'] == 'true' ? 'dummy' : 'vagrant'),
           'require_chef_omnibus' => chef_version || true,
+          'dockerfile' => File.expand_path('../kitchen/Dockerfile.erb', __FILE__),
+          # No password for securiteeeee.
+          'password' => nil,
+          # Our docker settings.
+          'binary' => (ENV['TRAVIS'] == 'true' ? './' : '') + 'docker',
+          'socket' => 'tcp://docker.poise.io:443',
+          'tls_verify' => 'true',
+          'tls_cacert' => 'test/docker/docker.ca',
+          'tls_cert' => 'test/docker/docker.pem',
+          'tls_key' => 'test/docker/docker.key',
+          # Cache some stuff in the Docker image.
           'provision_command' => [
             # Run some installs at provision so they are cached in the image.
             # Install net-tools for netstat which is used by serverspec.
@@ -82,8 +103,9 @@ module PoiseBoiler
         },
         'transport' => {
           'name' => 'sftp',
+          'ssh_key' => docker_enabled ? File.expand_path('.kitchen/docker_id_rsa', root) : nil,
         },
-        'platforms' => expand_kitchen_platforms(platforms).map {|p| {'name' => p, 'run_list' => platform_run_list(p)} },
+        'platforms' => expand_kitchen_platforms(platforms).map {|p| platform_definition(p) },
       }.to_yaml.gsub(/---[ \n]/, '')
     end
 
@@ -100,6 +122,14 @@ module PoiseBoiler
       platforms
     end
 
+    def platform_definition(name)
+      {
+        'name' => name,
+        'run_list' => platform_run_list(name),
+        'driver_config' => platform_driver(name),
+      }
+    end
+
     # Return the platform-level run list for a given platform.
     #
     # @param platform [String] Platform name.
@@ -109,6 +139,21 @@ module PoiseBoiler
         %w{apt}
       else
         []
+      end
+    end
+
+    def platform_driver(platform)
+      if platform.start_with?('freebsd')
+        {
+          'binary' => (ENV['TRAVIS'] == 'true' ? './' : '') + 'docker-1.7.1',
+          'image' => 'lexaguskov/freebsd',
+          'socket' => ENV['POISE_DOCKER_FREEBSD'] || 'tcp://dockerbsd.poise.io:443',
+        }
+      else
+        {
+          'binary' => (ENV['TRAVIS'] == 'true' ? './' : '') + 'docker',
+          'socket' => ENV['POISE_DOCKER_LINUX'] || 'tcp://docker.poise.io:443',
+        }
       end
     end
   end

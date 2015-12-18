@@ -1,0 +1,82 @@
+<%# Pull in the base image. %>
+FROM <%= @image %>
+<%# Pass through proxy settings from Test Kitchen or the system. %>
+<% http_proxy = @http_proxy || ENV['http_proxy'] || ENV['HTTP_PROXY'] %>
+<% https_proxy = @https_proxy || ENV['https_proxy'] || ENV['HTTPS_PROXY'] %>
+<% no_proxy = @no_proxy || ENV['no_proxy'] || ENV['NO_PROXY'] %>
+<% if http_proxy %>
+ENV http_proxy <%= http_proxy %>
+ENV HTTP_PROXY <%= http_proxy %>
+<% end %>
+<% if https_proxy %>
+ENV https_proxy <%= https_proxy %>
+ENV HTTPS_PROXY <%= https_proxy %>
+<% end %>
+<% if no_proxy %>
+ENV no_proxy <%= no_proxy %>
+ENV NO_PROXY <%= no_proxy %>
+<% end %>
+<%# Per-platform initializations. %>
+<% case @platform; when 'debian', 'ubuntu' %>
+<% if @disable_upstart %>
+RUN dpkg-divert --local --rename --add /sbin/initctl
+RUN ln -sf /bin/true /sbin/initctl
+<% end %>
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update -o dockercachebust=<%= Date.today %>
+RUN apt-get install -y sudo openssh-server curl lsb-release net-tools
+<% when 'rhel', 'centos', 'fedora' %>
+RUN yum clean all
+RUN yum install -y sudo openssh-server openssh-clients which curl net-tools passwd
+<%# CentOS 7 does not install hostname by default, but EL6 has no hostname package. %>
+RUN yum install -y hostname || true
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
+RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+<% when 'arch' %>
+RUN pacman -Syu --noconfirm
+RUN pacman -S --noconfirm openssh sudo curl
+RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+<% when 'gentoo' %>
+RUN emerge sync
+RUN emerge net-misc/openssh app-admin/sudo
+RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+<% when 'gentoo-paludis' %>
+RUN cave sync
+RUN cave resolve -zx net-misc/openssh app-admin/sudo
+RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+<% when 'freebsd' %>
+RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf \
+  && env ASSUME_ALWAYS_YES=true pkg install sudo curl bash
+RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
+RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+<% end %>
+<%# Create the kitchen user, give it sudo, and create and authorized keys. %>
+<% homedir = @username == 'root' ? '/root' : "/home/#{@username}" %>
+RUN if ! getent passwd <%= @username %>; then \
+  <% if @platform == 'freebsd' %>pw <% end %>useradd <%= @username %> -d <%= homedir %> -m -s /bin/<%= @platform == 'freebsd' ? 'csh' : 'bash' %>; \
+fi
+<% if @password && !@password.empty? %>
+RUN echo <%= @username %>:<%= @password %> | chpasswd
+<% else %>
+RUN passwd -d <%= @username %>
+<% end %>
+RUN echo '<%= @username %> ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN mkdir -p /etc/sudoers.d
+RUN echo '<%= @username %> ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/<%= @username %>
+RUN chmod 0440 /etc/sudoers.d/<%= @username %>
+RUN mkdir -p <%= homedir %>/.ssh
+RUN chown -R <%= @username %> <%= homedir %>/.ssh
+RUN chmod 0700 <%= homedir %>/.ssh
+RUN touch <%= homedir %>/.ssh/authorized_keys
+RUN chown <%= @username %> <%= homedir %>/.ssh/authorized_keys
+RUN chmod 0600 <%= homedir %>/.ssh/authorized_keys
+<%# Custom provisioning commands. %>
+<% Array(@provision_command).each do |cmd| %>
+RUN <%= cmd %>
+<% end %>
+<%# Write out the authorized_keys, this happens last because it breaks the
+layer cache on each new test run. %>
+RUN echo '<%= IO.read(@public_key).strip %>' >> <%= homedir %>/.ssh/authorized_keys
