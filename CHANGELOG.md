@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.11
+
+* Make sure `ss` is available on EL7 for `port` resources in Serverspec.
+
 ## v1.1.10
 
 * Better fix for faraday gzip issues.
