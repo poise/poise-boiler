@@ -18,6 +18,7 @@ require 'spec_helper'
 
 describe PoiseBoiler::Helpers::Rake::Check do
   rakefile "require 'poise_boiler/helpers/rake/check'\nPoiseBoiler::Helpers::Rake::Check.install"
+  before { command('git config --global user.email "you@example.com" && git config --global user.name "Your Name"') }
   CHECK_INITIALIZER = 'git init && git add main.rb Rakefile && git commit -m "first commit" && git tag -a v1.0.0 -m "Release 1.0.0" && git remote add origin http://example.com/ && git branch -f origin/master'
 
   describe 'check' do
