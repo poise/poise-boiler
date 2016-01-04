@@ -17,7 +17,7 @@
 require 'spec_helper'
 
 describe 'poise_boiler/rake' do
-  file 'Rakefile', 'require "poise_boiler/rakefile"'
+  file 'Rakefile', 'require "poise_boiler/rake"'
   file 'test.gemspec', <<-EOH
 Gem::Specification.new do |spec|
   spec.name = 'test'
@@ -35,6 +35,11 @@ EOH
     its(:stdout) { is_expected.to include('rake release') }
     its(:stdout) { is_expected.to include('rake spec') }
     its(:stdout) { is_expected.to include('rake travis') }
+    its(:stdout) { is_expected.to include('rake debug') }
+    its(:stdout) { is_expected.to include('rake quiet') }
+    its(:stdout) { is_expected.to include('rake verbose') }
+    its(:stdout) { is_expected.to include('rake release:check') }
+    its(:stdout) { is_expected.to include('rake release:checkall') }
   end # /describe list of tasks
 
   describe 'specs in spec/' do
