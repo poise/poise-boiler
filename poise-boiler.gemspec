@@ -44,6 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mixlib-shellout', '>= 1.4', '< 3.0' # Chef 11 means shellout 1.4 :-(
   spec.add_dependency 'pry' # Travis depends on old-ass pry, see https://github.com/travis-ci/travis.rb/issues/245
   spec.add_dependency 'pry-byebug'
+  spec.add_dependency 'git', '~> 1.2'
 
   # Test gems
   spec.add_dependency 'rspec', '~> 3.2'
