@@ -47,7 +47,7 @@ module PoiseBoiler
           task 'release:checkall' do
             base_path = File.expand_path(ENV['POISE_ROOT'] || '~/src')
             Dir.foreach(base_path) do |entry|
-              next unless entry =~ /^(poise|application)/
+              next unless entry =~ /^(poise|application|halite)/
               next if entry =~ /^(application_examples|poise-docker|poise-dash|poise\.io|poise-repomgr)/
               path = File.join(base_path, entry)
               next unless Dir.exist?(File.join(path, '.git'))
