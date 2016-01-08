@@ -106,6 +106,14 @@ module PoiseBoiler
           'name' => 'sftp',
           'ssh_key' => docker_enabled ? File.expand_path('.kitchen/docker_id_rsa', root) : nil,
         },
+        'provisioner' => {
+          'attributes' => {
+            'POISE_DEBUG' => !!((ENV['POISE_DEBUG'] && ENV['POISE_DEBUG'] != 'false') ||
+                                (ENV['poise_debug'] && ENV['poise_debug'] != 'false') ||
+                                (ENV['DEBUG'] && ENV['DEBUG'] != 'false')
+                               ),
+          },
+        },
         'platforms' => expand_kitchen_platforms(platforms).map {|p| platform_definition(p) },
       }.to_yaml.gsub(/---[ \n]/, '')
     end
