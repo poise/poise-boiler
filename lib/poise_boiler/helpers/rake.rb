@@ -27,6 +27,7 @@ module PoiseBoiler
     # @see Travis
     class Rake < Halite::HelperBase
       autoload :Badges, 'poise_boiler/helpers/rake/badges'
+      autoload :Bump, 'poise_boiler/helpers/rake/bump'
       autoload :Check, 'poise_boiler/helpers/rake/check'
       autoload :Core, 'poise_boiler/helpers/rake/core'
       autoload :Debug, 'poise_boiler/helpers/rake/debug'
@@ -37,8 +38,9 @@ module PoiseBoiler
       # @return [void]
       def install
         Core.install(gem_name: gem_name, base: base, **options)
-        Check.install(gem_name: gem_name, base: base, **options)
         Badges.install(gem_name: gem_name, base: base, **options)
+        Bump.install(gem_name: gem_name, base: base, **options)
+        Check.install(gem_name: gem_name, base: base, **options)
         Debug.install(gem_name: gem_name, base: base, **options)
         Travis.install(gem_name: gem_name, base: base, **options)
       end
