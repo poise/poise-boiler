@@ -51,6 +51,10 @@ module PoiseBoiler
             release_task.clear
           end
 
+          # No-op Bundler's release:source_control_push task.
+          source_control_push_task = ::Rake.application.lookup('release:source_control_push')
+          source_control_push_task.clear if source_control_push_task
+
           # Tag the release.
           task 'release:tag' do
             tag_release!(commit: false)
