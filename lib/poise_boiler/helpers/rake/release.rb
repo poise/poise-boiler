@@ -87,7 +87,8 @@ module PoiseBoiler
         end
 
         def git_commit!(message)
-          commit_cmd = ['git', 'commit', '-a', '-m', message]
+          sh(*['git', 'add', find_version_rb])
+          commit_cmd = ['git', 'commit', '-m', message]
           sh(*commit_cmd)
         end
 
