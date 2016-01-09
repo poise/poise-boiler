@@ -128,6 +128,7 @@ module PoiseBoiler
         end
 
         def release_gem!(bump_type)
+          ::Rake::Task['release:guard_clean'].invoke
           bump_version!(type: bump_type, release: true) do
             tag_release! do
               # Run this as a subproc so it reloads the gemspec. Probably not
