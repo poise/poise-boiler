@@ -42,12 +42,14 @@ module PoiseBoiler
           extend ::Rake::DSL
 
           # Rename the original release task.
-          release_task = ::Rake::Task['release']
-          release_actions = release_task.actions.dup
-          task 'release:original' => release_task.prerequisites.dup do
-            release_actions.map(&:call)
+          release_task = ::Rake.application.lookup('release')
+          if release_task
+            release_actions = release_task.actions.dup
+            task 'release:original' => release_task.prerequisites.dup do
+              release_actions.map(&:call)
+            end
+            release_task.clear
           end
-          release_task.clear
 
           # Tag the release.
           task 'release:tag' do
