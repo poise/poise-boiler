@@ -22,42 +22,12 @@ require 'halite/helper_base'
 module PoiseBoiler
   module Helpers
     class Rake
-      # Helper for a Rakefile to install tasks for bumping gem versions.
+      # Helper methods for bumping gem versions.
       #
+      # @api private
       # @since 1.2.0
-      # @example Installing tasks
-      #   require 'poise_boiler/helpers/rake/bump'
-      #   PoiseBoiler::Helpers::Rake::Bump.install
-      # @example Bumping a patch version
-      #   $ rake release:bump
-      # @example Bumping a minor version
-      #   $ rake release:bump:minor
-      class Bump < Halite::HelperBase
-        VERSION_CONST = /(^\s*VERSION = ['"])[^'"]+(['"]$)/
-
-        # Install the rake tasks.
-        #
-        # @return [void]
-        def install
-          # Delayed so that Rake doesn't need to be loaded to run this file.
-          extend ::Rake::DSL
-
-          desc "Bump the gem's patch version"
-          task 'release:bump' do
-            bump_version!(type: :patch)
-          end
-
-          desc "Bump the gem's minor version"
-          task 'release:bump:minor' do
-            bump_version!(type: :minor)
-          end
-          desc "Bump the gem's major version"
-          task 'release:bump:major' do
-            bump_version!(type: :major)
-          end
-        end
-
-        private
+      module BumpHelpers
+        VERSION_CONST = /(^\s*VERSION = ['"])([^'"]+)(['"]\s*$)/
 
         def latest_tag
           git = Git.open(base)
@@ -97,17 +67,59 @@ module PoiseBoiler
           candidates.min_by {|path| path.size }
         end
 
-        def bump_version!(type: :patch, release: !!ENV['RELEASE'])
+        def bump_version!(type: :patch, release: false, &block)
           version_rb_path = find_version_rb
-          raise RuntimeError.new("Unable to find a version.rb in #{base}") unless version_rb_path
+          raise "Unable to find a version.rb in #{base}" unless version_rb_path
           shell.say("Bumping version in #{version_rb_path}") if ENV['DEBUG']
           content = IO.read(version_rb_path)
+          raise "Unable to find current version in #{version_rb_path}" unless VERSION_CONST =~ content
+          current_version = $2
           version = bumped_version(type: type, release: release)
-          shell.say("Bumping gem version to #{version}")
-          content.gsub!(VERSION_CONST, "\\1#{version}\\2")
-          IO.write(version_rb_path, content)
+          shell.say("Bumping gem version from #{current_version} to #{version}")
+          new_content = content.gsub(VERSION_CONST, "\\1#{version}\\3")
+          IO.write(version_rb_path, new_content)
+          begin
+            block.call if block
+          rescue Exception
+            # Restore the original version if anything goes wrong.
+            IO.write(version_rb_path, content)
+            raise
+          end
         end
+      end
 
+      # Helper for a Rakefile to install tasks for bumping gem versions.
+      #
+      # @since 1.2.0
+      # @example Installing tasks
+      #   require 'poise_boiler/helpers/rake/bump'
+      #   PoiseBoiler::Helpers::Rake::Bump.install
+      # @example Bumping a patch version
+      #   $ rake release:bump
+      # @example Bumping a minor version
+      #   $ rake release:bump:minor
+      class Bump < Halite::HelperBase
+        include BumpHelpers
+
+        # Install the rake tasks.
+        #
+        # @return [void]
+        def install
+          # Delayed so that Rake doesn't need to be loaded to run this file.
+          extend ::Rake::DSL
+
+          task 'release:bump' do
+            bump_version!(type: :patch)
+          end
+
+          task 'release:bump:minor' do
+            bump_version!(type: :minor)
+          end
+
+          task 'release:bump:major' do
+            bump_version!(type: :major)
+          end
+        end
       end
     end
   end
