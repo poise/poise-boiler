@@ -31,7 +31,7 @@ EOH
   describe 'release:bump' do
     rake_task 'release:bump'
 
-    it { is_expected.to eq "Bumping gem version to 2.3.5.pre\n" }
+    it { is_expected.to eq "Bumping gem version from 1.0.0.pre to 2.3.5.pre\n" }
     it { subject; expect(file_content).to eq <<-EOH }
 module MyGem
   VERSION = '2.3.5.pre'
@@ -42,7 +42,7 @@ EOH
   describe 'release:bump:minor' do
     rake_task 'release:bump:minor'
 
-    it { is_expected.to eq "Bumping gem version to 2.4.0.pre\n" }
+    it { is_expected.to eq "Bumping gem version from 1.0.0.pre to 2.4.0.pre\n" }
     it { subject; expect(file_content).to eq <<-EOH }
 module MyGem
   VERSION = '2.4.0.pre'
@@ -53,7 +53,7 @@ EOH
   describe 'release:bump:major' do
     rake_task 'release:bump:major'
 
-    it { is_expected.to eq "Bumping gem version to 3.0.0.pre\n" }
+    it { is_expected.to eq "Bumping gem version from 1.0.0.pre to 3.0.0.pre\n" }
     it { subject; expect(file_content).to eq <<-EOH }
 module MyGem
   VERSION = '3.0.0.pre'
