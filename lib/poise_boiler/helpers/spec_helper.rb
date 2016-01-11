@@ -73,12 +73,8 @@ module PoiseBoiler
             # Hide the spec helper from RSpec traces by default.
             config.backtrace_exclusion_patterns << %r{/halite/spec_helper}
             # In verbose mode, set Chef to log level debug by default.
-            if ENV['VERBOSE']
-              config.before { chefspec_options[:log_level] ||= :debug }
-            end
-            # In debug mode, enable Poise log spew.
             if ENV['DEBUG']
-              config.before { default_attributes[:poise_debug] ||= true }
+              config.before { chefspec_options[:log_level] ||= :debug }
             end
           end
         end

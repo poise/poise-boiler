@@ -46,7 +46,7 @@ module PoiseBoiler
             t.rspec_opts = [].tap do |a|
               a << '--color'
               a << "--format #{ENV['CI'] ? 'documentation' : 'Fuubar'}"
-              a << '--backtrace' if ENV['DEBUG']
+              a << '--backtrace' if ENV['VERBOSE'] || ENV['DEBUG']
               a << "--seed #{ENV['SEED']}" if ENV['SEED']
               a << "--tag #{args[:tag]}" if args[:tag]
               a << "--default-path test"
