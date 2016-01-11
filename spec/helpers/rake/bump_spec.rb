@@ -18,7 +18,7 @@ require 'spec_helper'
 
 describe PoiseBoiler::Helpers::Rake::Bump do
   rakefile "require 'poise_boiler/helpers/rake/bump'\nPoiseBoiler::Helpers::Rake::Bump.install"
-  before { command('git config --global user.email "you@example.com" && git config --global user.name "Your Name" && git init && git add Rakefile && git commit -m "first commit" && git tag -a v2.3.4 -m "Release 2.3.4"') }
+  before { command('git init && git config user.email "you@example.com" && git config user.name "Your Name" && git add Rakefile && git commit -m "first commit" && git tag -a v2.3.4 -m "Release 2.3.4"') }
   file 'lib/mygem/version.rb', <<-EOH
 module MyGem
   VERSION = '1.0.0.pre'
