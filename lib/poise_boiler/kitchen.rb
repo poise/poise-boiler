@@ -15,7 +15,6 @@
 #
 
 require 'kitchen'
-require 'kitchen-sync'
 
 
 module PoiseBoiler
