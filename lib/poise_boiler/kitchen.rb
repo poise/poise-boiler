@@ -88,8 +88,8 @@ module PoiseBoiler
             # Run some installs at provision so they are cached in the image.
             # Install net-tools for netstat which is used by serverspec, and
             # iproute for ss (only used on EL7).
-            "test ! -f /etc/debian_version || apt-get install -y net-tools",
-            "test ! -f /etc/redhat-release || yum -y install net-tools iproute",
+            "test ! -f /etc/debian_version || apt-get install -y net-tools rsync",
+            "test ! -f /etc/redhat-release || yum -y install net-tools iproute rsync",
             # Make sure the hostname utilitiy is installed on CentOS 7. The
             # ||true is for EL6 which has no hostname package. Sigh.
             "test ! -f /etc/redhat-release || yum -y install hostname || true",
