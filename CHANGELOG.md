@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.0
+
+* A full suite of release automation commands.
+* Re-add the `travis` gem as a dependency now that it has removed the ancient
+  `pry` it depended on.
+* Improved handling for setting test verbosity in a unified way.
+
 ## v1.1.11
 
 * Make sure `ss` is available on EL7 for `port` resources in Serverspec.
