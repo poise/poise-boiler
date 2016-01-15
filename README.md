@@ -46,6 +46,41 @@ and a `spec` task to run unit tests.
 require 'poise_boiler/rakefile'
 ```
 
+### Rake Tasks
+
+#### `test`
+
+Run all tests, specs, foodcritic, and kitchen.
+
+#### `spec`
+
+Run Rspec tests.
+
+#### `badges`
+
+Generate README badges for a project.
+
+#### `debug`, `quiet`, `verbose`
+
+Set the relevant mode environment variables. Can be abbreviated `d`, `q`, and `v`.
+
+#### `check`
+
+List uncommitted file changes and commits since the last release.
+
+#### `checkall`
+
+Run `quiet check` for all projects. This is specific to my folder layout and is
+less likely to work for others.
+
+#### `travis`
+
+Run tests for Travis CI. This does some setup and then runs `rake test`.
+
+#### `release`, `release:minor`, `release:major`
+
+Create a new release and push toe RubyGems and Supermarket.
+
 ## `.kitchen.yml`
 
 The `.kitchen.yml` helper sets up a default driver and default values for
