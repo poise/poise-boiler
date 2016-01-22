@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.5.0
+
+* Can't actually force TK 1.5 because of https://github.com/test-kitchen/test-kitchen/issues/922.
+
 ## v1.4.0
 
 * Actually support Test Kitchen 1.5 correctly. Don't use 1.3.0.
