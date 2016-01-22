@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.3.0
+
+* Upgrade to Test Kitchen 1.5 and Foodcritic 6.0.
+
 ## v1.2.0
 
 * A full suite of release automation commands.

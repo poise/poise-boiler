@@ -52,10 +52,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'chefspec', '~> 4.2'
   spec.add_dependency 'fuubar', '~> 2.0'
   spec.add_dependency 'simplecov', '~> 0.9'
-  spec.add_dependency 'foodcritic', '~> 5.0'
+  spec.add_dependency 'foodcritic', '~> 6.0'
 
   # Integration gems
-  spec.add_dependency 'test-kitchen', '~> 1.4'
+  spec.add_dependency 'test-kitchen', '~> 1.5'
   spec.add_dependency 'kitchen-vagrant'
   spec.add_dependency 'vagrant-wrapper'
   spec.add_dependency 'kitchen-docker'
