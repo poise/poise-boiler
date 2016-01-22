@@ -23,6 +23,8 @@ describe PoiseBoiler::Helpers::Rake::Travis do
 Gem::Specification.new do |s|
   s.name = 'example'
   s.version = '1.0.0'
+  s.authors = ['Alan Smithee']
+  s.email = %{asmithee@example.com}
 end
 EOH
   file '.kitchen.yml', <<-EOH

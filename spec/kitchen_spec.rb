@@ -37,7 +37,7 @@ EOH
     context 'kitchen diagnose' do
       command 'kitchen diagnose'
       its(:stdout) { is_expected.to match(%r{- curl -L https://chef.io/chef/install.sh | bash -s --$}) }
-      its(:stdout) { is_expected.to include('/opt/chef/embedded/bin/gem install --no-rdoc --no-ri thor busser busser-serverspec') }
+      its(:stdout) { is_expected.to match(%r{/opt/chef/embedded/bin/gem\s+install\s+--no-rdoc\s+--no-ri\s+--bindir\s+/tmp/verifier/bin\s+thor\s+busser\s+busser-serverspec}m) }
       its(:stdout) { is_expected.to include('require_chef_omnibus: true') }
     end # /context kitchen diagnose
   end # /context with defaults
