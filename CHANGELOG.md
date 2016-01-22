@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.4.0
+
+* Actually support Test Kitchen 1.5 correctly. Don't use 1.3.0.
+
 ## v1.3.0
 
 * Upgrade to Test Kitchen 1.5 and Foodcritic 6.0.

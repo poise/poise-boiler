@@ -59,7 +59,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'kitchen-vagrant'
   spec.add_dependency 'vagrant-wrapper'
   spec.add_dependency 'kitchen-docker'
-  spec.add_dependency 'kitchen-sync', '~> 2.0'
+  spec.add_dependency 'kitchen-sync', '~> 2.1'
   spec.add_dependency 'berkshelf', '~> 4.0'
 
   # Travis gems
