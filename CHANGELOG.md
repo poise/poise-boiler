@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.5.1
+
+* Fix the bundler gem install to work with busser-serverspec.
+
 ## v1.5.0
 
 * Can't actually force TK 1.5 because of https://github.com/test-kitchen/test-kitchen/issues/922.

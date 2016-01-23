@@ -96,7 +96,9 @@ module PoiseBoiler
             # Install Chef (with the correct verison).
             "curl -L https://chef.io/chef/install.sh | bash -s --#{install_arguments}",
             # Install some kitchen-related gems. Normally installed during the verify step but that is idempotent.
-            "env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install --no-rdoc --no-ri --bindir /tmp/verifier/bin thor busser busser-serverspec serverspec bundler",
+            "env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install --no-rdoc --no-ri --bindir /tmp/verifier/bin thor busser busser-serverspec serverspec",
+            # Install bundler for some tests that pull in spechelper gems.
+            "env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install --no-rdoc --no-ri bundler",
             # Fix directory permissions.
             "chown -R kitchen /tmp/verifier",
           ],
