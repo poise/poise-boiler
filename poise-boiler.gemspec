@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
 
   # Development gems
   spec.add_dependency 'addressable', '~> 2.3'
+  spec.add_dependency 'bundler' # Used for Bundler.load_gemspec
   spec.add_dependency 'rake', '~> 10.4'
   spec.add_dependency 'travis', '~> 1.8', '>= 1.8.1'
   spec.add_dependency 'yard', '~> 0.8'

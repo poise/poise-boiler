@@ -108,6 +108,7 @@ module PoiseBoiler
           'ssh_key' => docker_enabled ? File.expand_path('.kitchen/docker_id_rsa', root) : nil,
         },
         'provisioner' => {
+          'name' => 'poise_solo',
           'attributes' => {
             'POISE_DEBUG' => !!((ENV['POISE_DEBUG'] && ENV['POISE_DEBUG'] != 'false') ||
                                 (ENV['poise_debug'] && ENV['poise_debug'] != 'false') ||
@@ -146,7 +147,7 @@ module PoiseBoiler
     # @return [Array<String>]
     def platform_run_list(platform)
       if platform.start_with?('debian') || platform.start_with?('ubuntu')
-        %w{apt}
+        []#%w{apt}
       else
         []
       end
