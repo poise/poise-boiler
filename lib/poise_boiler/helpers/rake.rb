@@ -33,6 +33,7 @@ module PoiseBoiler
       autoload :Debug, 'poise_boiler/helpers/rake/debug'
       autoload :Release, 'poise_boiler/helpers/rake/release'
       autoload :Travis, 'poise_boiler/helpers/rake/travis'
+      autoload :Year, 'poise_boiler/helpers/rake/year'
 
       # Install all rake tasks.
       #
@@ -45,6 +46,7 @@ module PoiseBoiler
         Debug.install(gem_name: gem_name, base: base, **options)
         Release.install(gem_name: gem_name, base: base, **options)
         Travis.install(gem_name: gem_name, base: base, **options)
+        Year.install(gem_name: gem_name, base: base, **options)
       end
     end
   end
