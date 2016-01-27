@@ -138,7 +138,7 @@ module PoiseBoiler
     def platform_definition(name, root)
       {
         'name' => name,
-        'run_list' => platform_run_list(name, root) + %w{poise-profiler},
+        'run_list' => platform_run_list(name, root) + ((ENV['CI'] || ENV['DEBUG'] || ENV['PROFILE']) ? %w{poise-profiler} : []),
         'driver_config' => platform_driver(name),
       }
     end
