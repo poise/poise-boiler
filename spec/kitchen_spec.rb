@@ -31,7 +31,7 @@ EOH
   context 'with defaults' do
     context 'kitchen list' do
       command 'kitchen list'
-      its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+ChefSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
+      its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
     end # /context kitchen list
 
     context 'kitchen diagnose' do
@@ -52,10 +52,10 @@ suites:
 - name: default
 EOH
     command 'kitchen list'
-    its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+ChefSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-ubuntu-1204\s+(Vagrant|Dummy)\s+ChefSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-centos-6\s+(Vagrant|Dummy)\s+ChefSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-centos-7\s+(Vagrant|Dummy)\s+ChefSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-ubuntu-1204\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-centos-6\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-centos-7\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
   end # /context with a platform alias
 
   context 'with $CHEF_VERSION set' do
@@ -86,7 +86,7 @@ suites:
 - name: default
 EOH
     command 'kitchen list'
-    its(:stdout) { is_expected.to match(/default-gentoo\s+(Vagrant|Dummy)\s+ChefSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
-    its(:stdout) { is_expected.to match(/default-arch\s+(Vagrant|Dummy)\s+ChefSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-gentoo\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
+    its(:stdout) { is_expected.to match(/default-arch\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/) }
   end # /context with a platform override
 end
