@@ -14,7 +14,8 @@
 # limitations under the License.
 #
 
-require 'addressable/uri'
+require 'uri'
+
 require 'halite/gem'
 require 'halite/helper_base'
 require 'mixlib/shellout'
@@ -82,7 +83,7 @@ module PoiseBoiler
         # @return [String]
         def badge(alt, img, href)
           # Default scheme and hostname because I can.
-          img = "https://img.shields.io/#{img}.svg" unless Addressable::URI.parse(img).host
+          img = "https://img.shields.io/#{img}.svg" unless URI.parse(img).host
           "[![#{alt}](#{img})](#{href})\n"
         end
 
@@ -97,11 +98,16 @@ module PoiseBoiler
           git_remote = git_shell_out(%W{config --get branch.#{git_head}.remote})
           git_remote = 'origin' if !git_remote || git_remote.empty? # Default value
           git_info = git_shell_out(%w{ls-remote --get-url}+[git_remote])
-          git_regex = %r{/?(.*/.+?)(\.git)?$}
-          if md = Addressable::URI.parse(git_info).path.match(git_regex)
-            md[1]
+          parsed_remote = if git_info =~ /^git@[^:]+:/
+            path = git_info.split(':').last
+            path = "/#{path}" unless path.start_with?('/')
+            path
           else
-            # Unable to auto-detect
+            URI.parse(git_info).path
+          end
+          if parsed_remote =~ %r{/?(.*/.+?)(\.git)?$}
+            $1
+          else
             nil
           end
         end
