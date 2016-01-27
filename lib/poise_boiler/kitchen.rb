@@ -43,7 +43,7 @@ module PoiseBoiler
     # @example .kitchen.yml
     #   #<% require 'poise_boiler' %>
     #   <%= PoiseBoiler.kitchen %>
-    def kitchen(platforms: 'ubuntu-14.04', root: nil)
+    def kitchen(platforms: 'linux', root: nil)
       # Figure out the directory that contains the kitchen.yml.
       root ||= if caller.find {|line| !line.start_with?(File.expand_path('../..', __FILE__)) } =~ /^(.*?):\d+:in/
         File.expand_path('..', $1)
