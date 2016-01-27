@@ -28,6 +28,10 @@ module PoiseBoiler
       end
       expand_path_for :gemspec
 
+      def self.name
+        'PoiseSolo'
+      end
+
       def create_sandbox
         super
         convert_halite_cookbooks
