@@ -19,6 +19,8 @@ require 'fileutils'
 require 'halite'
 require 'kitchen/provisioner/chef_solo'
 
+require 'poise_boiler/kitchen/core_ext'
+
 
 module PoiseBoiler
   module Kitchen
