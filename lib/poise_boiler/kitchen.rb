@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+require 'bundler'
+require 'halite'
 require 'kitchen'
 
 
@@ -67,11 +69,10 @@ module PoiseBoiler
       else
         ''
       end
-      docker_enabled = File.exist?(File.expand_path('test/docker/docker.key', root))
       {
         'chef_versions' => %w{12},
         'driver' => {
-          'name' => (docker_enabled ? 'docker' : ENV['TRAVIS'] == 'true' ? 'dummy' : 'vagrant'),
+          'name' => (docker_enabled?(root) ? 'docker' : ENV['TRAVIS'] == 'true' ? 'dummy' : 'vagrant'),
           'require_chef_omnibus' => chef_version || true,
           'dockerfile' => File.expand_path('../kitchen/Dockerfile.erb', __FILE__),
           # No password for securiteeeee.
@@ -105,7 +106,7 @@ module PoiseBoiler
         },
         'transport' => {
           'name' => 'sftp',
-          'ssh_key' => docker_enabled ? File.expand_path('.kitchen/docker_id_rsa', root) : nil,
+          'ssh_key' => docker_enabled?(root) ? File.expand_path('.kitchen/docker_id_rsa', root) : nil,
         },
         'provisioner' => {
           'name' => 'poise_solo',
@@ -116,7 +117,8 @@ module PoiseBoiler
                                ),
           },
         },
-        'platforms' => expand_kitchen_platforms(platforms).map {|p| platform_definition(p) },
+        'platforms' => expand_kitchen_platforms(platforms).map {|p| platform_definition(p, root) },
+        'suites' => [suite_definition(root)],
       }.to_yaml.gsub(/---[ \n]/, '')
     end
 
@@ -133,10 +135,10 @@ module PoiseBoiler
       platforms
     end
 
-    def platform_definition(name)
+    def platform_definition(name, root)
       {
         'name' => name,
-        'run_list' => platform_run_list(name),
+        'run_list' => platform_run_list(name, root) + %w{poise-profiler},
         'driver_config' => platform_driver(name),
       }
     end
@@ -145,9 +147,9 @@ module PoiseBoiler
     #
     # @param platform [String] Platform name.
     # @return [Array<String>]
-    def platform_run_list(platform)
-      if platform.start_with?('debian') || platform.start_with?('ubuntu')
-        []#%w{apt}
+    def platform_run_list(platform, root)
+      if (platform.start_with?('debian') || platform.start_with?('ubuntu')) && !docker_enabled?(root)
+        %w{apt}
       else
         []
       end
@@ -167,5 +169,23 @@ module PoiseBoiler
         }
       end
     end
+
+    def suite_definition(root)
+      gemspec_path = Dir[File.join(root, '*.gemspec')].first
+      unless gemspec_path
+        puts "Unable to determine gemspec path for #{root}"
+        return {}
+      end
+      gem_data = Halite::Gem.new(Bundler.load_gemspec(gemspec_path))
+      {
+        'name' => 'default',
+        'run_list' => (File.exist?(File.join(root, 'test', 'cookbook')) || File.exist?(File.join(root, 'test', 'cookbooks'))) ? ["#{gem_data.cookbook_name}_test"] : [gem_data.cookbook_name],
+      }
+    end
+
+    def docker_enabled?(root)
+      File.exist?(File.expand_path('test/docker/docker.key', root))
+    end
+
   end
 end

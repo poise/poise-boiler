@@ -54,7 +54,7 @@ module PoiseBoiler
 
       def convert_halite_cookbooks
         @real_cookbook_deps = {}
-        gems_to_convert = {}
+        gems_to_convert = {'poise-profiler' => Halite::Gem.new('poise-profiler')}
         gems_to_check = [cookbook_gem]
         until gems_to_check.empty?
           check = gems_to_check.pop

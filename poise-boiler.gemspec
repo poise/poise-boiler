@@ -62,6 +62,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'vagrant-wrapper'
   spec.add_dependency 'kitchen-docker'
   spec.add_dependency 'kitchen-sync', '~> 2.1'
+  spec.add_dependency 'poise-profiler', '~> 1.0.pre'
 
   # Travis gems
   spec.add_dependency 'codeclimate-test-reporter', '~> 0.4'
