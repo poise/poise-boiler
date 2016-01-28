@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.6.0
+
+* New rake task to update copyright years.
+* New kitchen provisioner to avoid using Berkshelf unless we need non-gem cookbooks.
+* Provide a default suite config for kitchen.
+* Berkshelf is no longer a dependency. This is kind of a compat break but oh well.
+* Automatically run poise-profiler in CI.
+
 ## v1.5.1
 
 * Fix the bundler gem install to work with busser-serverspec.
