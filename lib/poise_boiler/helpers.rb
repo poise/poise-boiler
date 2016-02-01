@@ -20,6 +20,7 @@ module PoiseBoiler
   #
   # @since 1.0.0
   module Helpers
+    autoload :Kitchen, 'poise_boiler/helpers/kitchen'
     autoload :Rake, 'poise_boiler/helpers/rake'
     autoload :SpecHelper, 'poise_boiler/helpers/spec_helper'
   end

@@ -14,11 +14,10 @@
 # limitations under the License.
 #
 
-require 'poise_boiler/kitchen'
-
 
 module PoiseBoiler
   autoload :Helpers, 'poise_boiler/helpers'
+  autoload :Kitchen, 'poise_boiler/kitchen'
 
   # (see PoiseBoiler::Kitchen#kitchen)
   def self.kitchen(**options)

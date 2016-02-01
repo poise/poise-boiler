@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-require 'poise_boiler/helpers/kitchen'
+require 'poise_boiler'
 
 
 module PoiseBoiler
