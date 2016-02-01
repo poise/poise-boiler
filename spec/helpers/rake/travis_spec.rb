@@ -117,7 +117,20 @@ EOH
   end # /context secure vars
 
   context 'secure vars and Rackspace' do
-    file '.kitchen.travis.yml', 'name: rackspace'
+    file '.kitchen.yml', <<-EOH
+# PoiseBoiler.kitchen(driver: 'rackspace')
+driver:
+  name: dummy
+
+provisioner:
+  name: dummy
+
+platforms:
+- name: default
+
+suites:
+- name: default
+EOH
     file '.ssh/stub'
     environment TRAVIS_SECURE_ENV_VARS: 'true'
     before do

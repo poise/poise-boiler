@@ -69,4 +69,5 @@ Gem::Specification.new do |spec|
 
   # Development dependencies (yo dawg)
   spec.add_development_dependency 'rspec-command', '~> 1.0'
+  spec.add_development_dependency 'kitchen-rackspace', '~> 0.20'
 end

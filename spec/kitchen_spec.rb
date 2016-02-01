@@ -110,4 +110,15 @@ EOH
       is_expected.to match(/default-arch\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
     end
   end # /context with a platform override
+
+  context 'with kitchen-rackspace' do
+    file '.kitchen.yml', <<-EOH
+#<% require 'poise_boiler' %>
+<%= PoiseBoiler.kitchen(driver: 'rackspace') %>
+EOH
+    command 'kitchen list'
+    its(:stdout) do
+      is_expected.to match(/default-ubuntu-1204\s+Rackspace\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
+    end
+  end # /context with kitchen-rackspace
 end
