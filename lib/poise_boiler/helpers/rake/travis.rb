@@ -91,7 +91,7 @@ module PoiseBoiler
         #
         # @return [Boolean]
         def integration_rackspace?
-          File.exist?('.kitchen.travis.yml') && IO.read('.kitchen.travis.yml').include?('name: rackspace')
+          File.exist?('.kitchen.yml') && IO.read('.kitchen.yml') =~ /driver: (['"])rackspace\1/
         end
 
         # Convert a Time object to nanoseconds since the epoch.
