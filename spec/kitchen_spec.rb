@@ -116,6 +116,7 @@ EOH
 #<% require 'poise_boiler' %>
 <%= PoiseBoiler.kitchen(driver: 'rackspace') %>
 EOH
+    env RACKSPACE_USERNAME: 'dummy'
     command 'kitchen list'
     its(:stdout) do
       is_expected.to match(/default-ubuntu-1204\s+Rackspace\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
