@@ -14,9 +14,7 @@
 # limitations under the License.
 #
 
-require 'bundler'
-require 'halite'
-require 'kitchen'
+require 'poise_boiler/helpers/kitchen'
 
 
 module PoiseBoiler
@@ -24,168 +22,21 @@ module PoiseBoiler
   #
   # @since 1.0.0
   module Kitchen
-    extend self
-    # Shorthand names for kitchen platforms.
-    #
-    # @see PoiseBoiler::Kitchen.kitchen
-    PLATFORM_ALIASES = {
-      'ubuntu' => %w{ubuntu-12.04 ubuntu-14.04},
-      'rhel' => %w{centos-6 centos-7},
-      'centos' => %w{rhel},
-      'linux' => %w{ubuntu rhel},
-      'unix' => %w{linux freebsd},
-      'all' => %{unix windows},
-    }
+    def self.instance
+      @instance
+    end
 
     # Return a YAML string suitable for inclusion in a .kitchen.yml config. This
     # will include the standard Poise/Halite boilerplate and some default values.
     #
     # @param platforms [String, Array<String>] Name(s) of platforms to use by default.
-    # @see PoiseBoiler::Kitchen::PLATFORM_ALIASES
+    # @see PoiseBoiler::Helpers::Kitchen::PLATFORM_ALIASES
     # @example .kitchen.yml
     #   #<% require 'poise_boiler' %>
     #   <%= PoiseBoiler.kitchen %>
-    def kitchen(platforms: 'linux', root: nil)
-      # Figure out the directory that contains the kitchen.yml.
-      root ||= if caller.find {|line| !line.start_with?(File.expand_path('../..', __FILE__)) } =~ /^(.*?):\d+:in/
-        File.expand_path('..', $1)
-      else
-        # ¯\_(ツ)_/¯
-        Dir.pwd
-      end
-      # SPEC_BLOCK_CI is used to force non-locking behavior inside tests.
-      chef_version = ENV['CHEF_VERSION'] || if ENV['SPEC_BLOCK_CI'] != 'true'
-        # If there isn't a specific override, lock TK to use the same version of Chef as the Gemfile.
-        require 'chef/version'
-        Chef::VERSION
-      end
-      install_arguments = if ENV['POISE_MASTER_BUILD']
-        # Force it to use any version down below.
-        chef_version = nil
-        # Use today's date as an ignored param to force the layer to rebuild.
-        " -n -- #{Date.today}"
-      elsif chef_version
-        " -v #{chef_version}"
-      else
-        ''
-      end
-      {
-        'chef_versions' => %w{12},
-        'driver' => {
-          'name' => (docker_enabled?(root) ? 'docker' : ENV['TRAVIS'] == 'true' ? 'dummy' : 'vagrant'),
-          'require_chef_omnibus' => chef_version || true,
-          'dockerfile' => File.expand_path('../kitchen/Dockerfile.erb', __FILE__),
-          # No password for securiteeeee.
-          'password' => nil,
-          # Our docker settings.
-          'binary' => (ENV['TRAVIS'] == 'true' ? './' : '') + 'docker',
-          'socket' => 'tcp://docker.poise.io:443',
-          'tls_verify' => 'true',
-          'tls_cacert' => 'test/docker/docker.ca',
-          'tls_cert' => 'test/docker/docker.pem',
-          'tls_key' => 'test/docker/docker.key',
-          # Cache some stuff in the Docker image.
-          'provision_command' => [
-            # Run some installs at provision so they are cached in the image.
-            # Install net-tools for netstat which is used by serverspec, and
-            # iproute for ss (only used on EL7).
-            "test ! -f /etc/debian_version || apt-get install -y net-tools rsync",
-            "test ! -f /etc/redhat-release || yum -y install net-tools iproute rsync",
-            # Make sure the hostname utilitiy is installed on CentOS 7. The
-            # ||true is for EL6 which has no hostname package. Sigh.
-            "test ! -f /etc/redhat-release || yum -y install hostname || true",
-            # Install Chef (with the correct verison).
-            "curl -L https://chef.io/chef/install.sh | bash -s --#{install_arguments}",
-            # Install some kitchen-related gems. Normally installed during the verify step but that is idempotent.
-            "env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install --no-rdoc --no-ri --bindir /tmp/verifier/bin thor busser busser-serverspec serverspec",
-            # Install bundler for some tests that pull in spechelper gems.
-            "env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install --no-rdoc --no-ri bundler",
-            # Fix directory permissions.
-            "chown -R kitchen /tmp/verifier",
-          ],
-        },
-        'transport' => {
-          'name' => 'sftp',
-          'ssh_key' => docker_enabled?(root) ? File.expand_path('.kitchen/docker_id_rsa', root) : nil,
-        },
-        'provisioner' => {
-          'name' => 'poise_solo',
-          'attributes' => {
-            'POISE_DEBUG' => !!((ENV['POISE_DEBUG'] && ENV['POISE_DEBUG'] != 'false') ||
-                                (ENV['poise_debug'] && ENV['poise_debug'] != 'false') ||
-                                (ENV['DEBUG'] && ENV['DEBUG'] != 'false')
-                               ),
-          },
-        },
-        'platforms' => expand_kitchen_platforms(platforms).map {|p| platform_definition(p, root) },
-        'suites' => [suite_definition(root)],
-      }.to_yaml.gsub(/---[ \n]/, '')
+    def self.kitchen(**options)
+      @instance = PoiseBoiler::Helpers::Kitchen.new(**options)
+      @instance.to_yaml
     end
-
-    private
-
-    # Expand aliases from PLATFORM_ALIASES.
-    def expand_kitchen_platforms(platforms)
-      platforms = Array(platforms)
-      last_platforms = []
-      while platforms != last_platforms
-        last_platforms = platforms
-        platforms = platforms.map {|p| PLATFORM_ALIASES[p] || p}.flatten.uniq
-      end
-      platforms
-    end
-
-    def platform_definition(name, root)
-      {
-        'name' => name,
-        'run_list' => platform_run_list(name, root) + ((ENV['CI'] || ENV['DEBUG'] || ENV['PROFILE']) ? %w{poise-profiler} : []),
-        'driver_config' => platform_driver(name),
-      }
-    end
-
-    # Return the platform-level run list for a given platform.
-    #
-    # @param platform [String] Platform name.
-    # @return [Array<String>]
-    def platform_run_list(platform, root)
-      if (platform.start_with?('debian') || platform.start_with?('ubuntu')) && !docker_enabled?(root)
-        %w{apt}
-      else
-        []
-      end
-    end
-
-    def platform_driver(platform)
-      if platform.start_with?('freebsd')
-        {
-          'binary' => (ENV['TRAVIS'] == 'true' ? './' : '') + 'docker-1.7.1',
-          'image' => 'lexaguskov/freebsd',
-          'socket' => ENV['POISE_DOCKER_FREEBSD'] || 'tcp://dockerbsd.poise.io:443',
-        }
-      else
-        {
-          'binary' => (ENV['TRAVIS'] == 'true' ? './' : '') + 'docker',
-          'socket' => ENV['POISE_DOCKER_LINUX'] || 'tcp://docker.poise.io:443',
-        }
-      end
-    end
-
-    def suite_definition(root)
-      gemspec_path = Dir[File.join(root, '*.gemspec')].first
-      unless gemspec_path
-        puts "Unable to determine gemspec path for #{root}"
-        return {}
-      end
-      gem_data = Halite::Gem.new(Bundler.load_gemspec(gemspec_path))
-      {
-        'name' => 'default',
-        'run_list' => (File.exist?(File.join(root, 'test', 'cookbook')) || File.exist?(File.join(root, 'test', 'cookbooks'))) ? ["#{gem_data.cookbook_name}_test"] : [gem_data.cookbook_name],
-      }
-    end
-
-    def docker_enabled?(root)
-      File.exist?(File.expand_path('test/docker/docker.key', root))
-    end
-
   end
 end

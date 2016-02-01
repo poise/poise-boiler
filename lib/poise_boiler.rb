@@ -21,8 +21,8 @@ module PoiseBoiler
   autoload :Helpers, 'poise_boiler/helpers'
 
   # (see PoiseBoiler::Kitchen#kitchen)
-  def self.kitchen(platforms: 'linux')
+  def self.kitchen(**options)
     # Alias in a top-level namespace to reduce typing.
-    Kitchen.kitchen(platforms: platforms)
+    Kitchen.kitchen(**options)
   end
 end

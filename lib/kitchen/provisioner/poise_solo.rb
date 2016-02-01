@@ -14,13 +14,13 @@
 # limitations under the License.
 #
 
-require 'poise_boiler/kitchen/provisioner'
+require 'poise_boiler/helpers/kitchen/provisioner'
 
 
 # @api private
 module Kitchen
   module Provisioner
     # An alias for Kitchen plugin loading.
-    PoiseSolo = PoiseBoiler::Kitchen::Provisioner
+    PoiseSolo = PoiseBoiler::Helpers::Kitchen::Provisioner
   end
 end
