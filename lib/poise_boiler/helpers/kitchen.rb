@@ -71,7 +71,7 @@ module PoiseBoiler
       end
 
       def cookbook_name
-        options['cookbook_name'] || cookbook.cookbook_name
+        options[:cookbook_name] || cookbook.cookbook_name
       end
 
       # Make this public for use in {PoiseBoiler::Helpers::Kitchen::Provisioner}.
