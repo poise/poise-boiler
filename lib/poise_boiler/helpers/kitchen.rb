@@ -70,6 +70,10 @@ module PoiseBoiler
         end
       end
 
+      def cookbook_name
+        options['cookbook_name'] || cookbook.cookbook_name
+      end
+
       # Make this public for use in {PoiseBoiler::Helpers::Kitchen::Provisioner}.
       public :cookbook
 
@@ -197,7 +201,7 @@ module PoiseBoiler
       def suite_config
         {
           'name' => 'default',
-          'run_list' => (File.exist?(File.join(base, 'test', 'cookbook')) || File.exist?(File.join(base, 'test', 'cookbooks'))) ? ["#{cookbook.cookbook_name}_test"] : [cookbook.cookbook_name],
+          'run_list' => (File.exist?(File.join(base, 'test', 'cookbook')) || File.exist?(File.join(base, 'test', 'cookbooks'))) ? ["#{cookbook_name}_test"] : [cookbook_name],
         }
       end
 

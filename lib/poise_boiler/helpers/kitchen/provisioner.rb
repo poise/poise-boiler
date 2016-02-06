@@ -37,15 +37,15 @@ module PoiseBoiler
 
         def create_sandbox
           super
-          convert_halite_cookbooks
+          convert_halite_cookbooks unless poise_helper_instance.options['no_gem']
           copy_test_cookbook
           copy_test_cookbooks
         end
 
         private
 
-        def cookbook_gem
-          PoiseBoiler::Kitchen.instance.cookbook || begin
+        def poise_helper_instance
+          PoiseBoiler::Kitchen.instance || begin
             raise 'Global poise-boiler kitchen instance not set'
           end
         end
@@ -53,7 +53,7 @@ module PoiseBoiler
         def convert_halite_cookbooks
           @real_cookbook_deps = {}
           gems_to_convert = {'poise-profiler' => Halite::Gem.new('poise-profiler')}
-          gems_to_check = [cookbook_gem]
+          gems_to_check = [poise_helper_instance.cookbook]
           until gems_to_check.empty?
             check = gems_to_check.pop
             # Already in the list, skip expansion.
@@ -82,7 +82,7 @@ module PoiseBoiler
         def copy_test_cookbook
           fixture_base = File.join(config[:kitchen_root], 'test', 'cookbook')
           return unless File.exist?(File.join(fixture_base, 'metadata.rb'))
-          tmp_base = File.join(sandbox_path, 'cookbooks', "#{cookbook_gem.cookbook_name}_test")
+          tmp_base = File.join(sandbox_path, 'cookbooks', "#{poise_helper_instance.cookbook_name}_test")
           FileUtils.mkdir_p(tmp_base)
           FileUtils.cp_r(File.join(fixture_base, "."), tmp_base)
         end
