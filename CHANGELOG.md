@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.7.0
+
+* Revamped Test Kitchen helper to improve build speed and stability.
+
 ## v1.6.0
 
 * New rake task to update copyright years.
