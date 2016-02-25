@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.version = '1.0.0'
   s.authors = ['Alan Smithee']
   s.email = %{asmithee@example.com}
+  s.homepage = 'https://github.com/example/example'
 end
 EOH
   file '.kitchen.yml', <<-EOH
