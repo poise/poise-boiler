@@ -15,4 +15,5 @@ gemfile:
 env:
   global:
   - USE_SYSTEM_GECODE=true
+before_install: "gem install bundler"
 script: bundle exec rake test
