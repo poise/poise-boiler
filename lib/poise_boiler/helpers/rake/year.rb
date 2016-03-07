@@ -30,7 +30,7 @@ module PoiseBoiler
       # @example Updating all copyright years
       #   $ rake year
       # @example Updating copyright years on a non-boiler project.
-      #   $ git ls-files | xargs perl -pi -e "s/Copyright (?:\(c\) )?((?\!$(date +%Y))\\d{4})(-\\d{4})?,/Copyright \\1-$(date +%Y),/gi"
+      #   $ git ls-files -z | xargs -0 perl -pi -e "s/Copyright (?:\(c\) )?((?\!$(date +%Y))\\d{4})(-\\d{4})?,/Copyright \\1-$(date +%Y),/gi"
       class Year < Halite::HelperBase
         # Install the rake tasks.
         #
