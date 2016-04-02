@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.7.1
+
+* Pin TK 1.6 until I sort out issues with 1.7.
+
 ## v1.7.0
 
 * Revamped Test Kitchen helper to improve build speed and stability.
