@@ -56,7 +56,7 @@ Gem::Specification.new do |spec|
 
   # Integration gems
   # https://github.com/test-kitchen/test-kitchen/issues/922
-  spec.add_dependency 'test-kitchen', '~> 1.4'
+  spec.add_dependency 'test-kitchen', '~> 1.6.0'
   spec.add_dependency 'kitchen-vagrant'
   spec.add_dependency 'vagrant-wrapper'
   spec.add_dependency 'kitchen-docker'
