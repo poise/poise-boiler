@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.7.2
+
+* Test Kitchen 1.7.1 resolves the issue with 1.7.0.
+
 ## v1.7.1
 
 * Pin TK 1.6 until I sort out issues with 1.7.
