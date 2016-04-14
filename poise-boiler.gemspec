@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
 
   # Development gems
   spec.add_dependency 'bundler' # Used for Bundler.load_gemspec
-  spec.add_dependency 'rake', '~> 10.4'
+  spec.add_dependency 'rake', '>= 10.4', '<= 12.0'
   spec.add_dependency 'travis', '~> 1.8', '>= 1.8.1'
   spec.add_dependency 'yard', '~> 0.8'
   spec.add_dependency 'yard-classmethods', '~> 1.0'
