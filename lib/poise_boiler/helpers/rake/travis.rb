@@ -42,11 +42,12 @@ module PoiseBoiler
 
           file './docker' do
             begin
-              sh(*%w{wget https://get.docker.com/builds/Linux/x86_64/docker-latest -O docker})
+              sh(*%w{wget https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz -O docker.tgz})
             rescue RuntimeError
-              sh(*%w{curl https://get.docker.com/builds/Linux/x86_64/docker-latest -o docker})
+              sh(*%w{curl https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz -o docker.tgz})
             end
-            File.chmod(0755, './docker')
+            sh(*%w{tar --strip-components=1 -xzvf docker.tgz})
+            File.chmod(0755, *%w{./docker ./docker-containerd ./docker-containerd-ctr ./docker-containerd-shim ./docker-runc})
           end
 
           file '.ssh/id_rsa' do
