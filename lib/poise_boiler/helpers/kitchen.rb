@@ -175,6 +175,7 @@ module PoiseBoiler
       # @return [Hash]
       def provisioner_config
         {
+          'log_level' => (ENV['DEBUG'] ? 'debug' : (ENV['CHEF_LOG_LEVEL'] || 'auto')),
           # Use the poise_solo provisioner, also part of kitchen-docker.
           'name' => 'poise_solo',
           # Pass through debug/poise_debug settings to the test instance.
