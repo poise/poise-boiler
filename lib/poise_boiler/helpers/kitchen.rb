@@ -28,12 +28,13 @@ module PoiseBoiler
       #
       # @see #expand_platforms
       PLATFORM_ALIASES = {
+        'windows' => %w{windows-2012r2},
         'ubuntu' => %w{ubuntu-12.04 ubuntu-14.04},
-        'rhel' => %w{centos-6 centos-7},
-        'centos' => %w{rhel},
-        'linux' => %w{ubuntu rhel},
-        'unix' => %w{linux freebsd},
-        'all' => %{unix windows},
+        'rhel' => %w{centos},
+        'centos' => %w{centos-6 centos-7},
+        'linux' => %w{ubuntu rhel centos},
+        'unix' => %w{linux}, #, freebsd},
+        'all' => %w{unix windows},
       }
 
       def initialize(**options)
@@ -102,7 +103,7 @@ module PoiseBoiler
       # @return [Array<String>]
       def expand_platforms
         # Default platform is linux unless overridden from the helper options.
-        platforms = Array(options[:platforms] || 'linux')
+        platforms = Array(options[:platforms] || (ENV['CI'] ? 'linux' : 'all'))
         last_platforms = []
         # This is probably not the most effcient solution but oh well.
         while platforms != last_platforms
@@ -195,9 +196,28 @@ module PoiseBoiler
           # On CI enable poise-profiler automatically. Load it here in case the
           # user defines their own suites.
           'run_list' => ((ENV['CI'] || ENV['DEBUG'] || ENV['PROFILE']) ? %w{poise-profiler} : []),
+        }.tap {|cfg| cfg.update(windows_platform_config(name)) if name.include?('windows') }
+      end
+
+      # Generate extra Test Kitchen platform configuration for Windows hosts.
+      def windows_platform_config(name)
+        {
+          'driver' => {
+            'name' => 'ec2',
+            'instance_type' => 'm3.medium',
+            'aws_ssh_key_id' => 'ec2',
+          },
+          'transport' => {
+            'name' => 'winrm',
+            'ssh_key' => File.expand_path('~/.ssh/ec2.pem'),
+          },
         }
       end
 
+      # Generate a Test Kitchen suite configuration hash. This is a single suite
+      # that runs the fixture cookbook if present otherwise the main cookbook.
+      #
+      # @return [Hash]
       def suite_config
         {
           'name' => 'default',
