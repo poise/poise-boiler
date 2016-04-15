@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.8.0
+
+* Windows testing harness support.
+* Allow specifying Chef log level via `$CHEF_LOG_LEVEL`.
+* Support for latest docker release format.
+
 ## v1.7.2
 
 * Test Kitchen 1.7.1 resolves the issue with 1.7.0.
