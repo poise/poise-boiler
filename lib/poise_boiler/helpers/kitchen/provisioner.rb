@@ -14,18 +14,18 @@
 # limitations under the License.
 #
 
-require 'fileutils'
-
-require 'halite'
 require 'kitchen/provisioner/chef_solo'
 
 require 'poise_boiler/helpers/kitchen/core_ext'
+require 'poise_boiler/helpers/kitchen/provisioner_helpers'
 
 
 module PoiseBoiler
   module Helpers
     class Kitchen
       class Provisioner < ::Kitchen::Provisioner::ChefSolo
+        include ProvisionerHelpers
+
         default_config :gemspec do |provisioner|
           Dir[File.join(provisioner[:kitchen_root], '*.gemspec')].first
         end
@@ -37,62 +37,9 @@ module PoiseBoiler
 
         def create_sandbox
           super
-          convert_halite_cookbooks unless poise_helper_instance.options['no_gem']
-          copy_test_cookbook
-          copy_test_cookbooks
-        end
-
-        private
-
-        def poise_helper_instance
-          PoiseBoiler::Kitchen.instance || begin
-            raise 'Global poise-boiler kitchen instance not set'
-          end
-        end
-
-        def convert_halite_cookbooks
-          @real_cookbook_deps = {}
-          gems_to_convert = {'poise-profiler' => Halite::Gem.new('poise-profiler')}
-          gems_to_check = [poise_helper_instance.cookbook]
-          until gems_to_check.empty?
-            check = gems_to_check.pop
-            # Already in the list, skip expansion.
-            next if gems_to_convert.include?(check.name)
-            # Not a cookbook, don't expand.
-            next unless check.is_halite_cookbook?
-            gems_to_convert[check.name] = check
-            # Expand dependencies and check each of those.
-            check.cookbook_dependencies.each do |dep|
-              dep_cook = dep.cookbook
-              if dep_cook
-                gems_to_check << dep_cook
-              else
-                @real_cookbook_deps[dep.name] = dep
-              end
-            end
-          end
-          # Convert all the things!
-          tmpbooks_dir = File.join(sandbox_path, 'cookbooks')
-          FileUtils.mkdir_p(tmpbooks_dir)
-          gems_to_convert.each do |name, gem_data|
-            Halite.convert(gem_data, File.join(tmpbooks_dir, gem_data.cookbook_name))
-          end
-        end
-
-        def copy_test_cookbook
-          fixture_base = File.join(config[:kitchen_root], 'test', 'cookbook')
-          return unless File.exist?(File.join(fixture_base, 'metadata.rb'))
-          tmp_base = File.join(sandbox_path, 'cookbooks', "#{poise_helper_instance.cookbook_name}_test")
-          FileUtils.mkdir_p(tmp_base)
-          FileUtils.cp_r(File.join(fixture_base, "."), tmp_base)
-        end
-
-        def copy_test_cookbooks
-          fixtures_base = File.join(config[:kitchen_root], 'test', 'cookbooks')
-          return unless File.exist?(fixtures_base)
-          tmp_base = File.join(sandbox_path, 'cookbooks')
-          FileUtils.mkdir_p(tmp_base)
-          FileUtils.cp_r(File.join(fixtures_base, "."), tmp_base)
+          convert_halite_cookbooks(sandbox_path) unless poise_helper_instance.options['no_gem']
+          copy_test_cookbook(sandbox_path)
+          copy_test_cookbooks(sandbox_path)
         end
 
       end
