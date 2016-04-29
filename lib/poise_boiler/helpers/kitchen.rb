@@ -178,8 +178,10 @@ module PoiseBoiler
           'log_level' => (ENV['DEBUG'] ? 'debug' : (ENV['CHEF_LOG_LEVEL'] || 'auto')),
           # Use the poise_solo provisioner, also part of kitchen-docker.
           'name' => 'poise_solo',
-          # Pass through debug/poise_debug settings to the test instance.
           'attributes' => {
+            # Pass through $CI to know if we are on Travis.
+            'CI' => ENV['CI'],
+            # Pass through debug/poise_debug settings to the test instance.
             'POISE_DEBUG' => !!((ENV['POISE_DEBUG'] && ENV['POISE_DEBUG'] != 'false') ||
                                 (ENV['poise_debug'] && ENV['poise_debug'] != 'false') ||
                                 (ENV['DEBUG'] && ENV['DEBUG'] != 'false')
