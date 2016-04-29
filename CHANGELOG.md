@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.9.0
+
+* Super experimental Halite+Policy provisioner plugin.
+* Set `node['CI']` if needed for poise-profiler.
+
 ## v1.8.0
 
 * Windows testing harness support.
