@@ -154,6 +154,10 @@ module PoiseBoiler
         when 'rackspace'
           # Set a default instance size.
           config['flavor_id'] = options[:rackspace_flavor] || 'general1-1'
+        when 'ec2'
+          # Allow passing some values as environment variables.
+          config['security_group_ids'] = [ENV['AWS_SECURITY_GROUP_ID']]
+          config['subnet_id'] = ENV['AWS_SUBNET_ID']
         end
         config
       end

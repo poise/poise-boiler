@@ -57,7 +57,7 @@ module PoiseBoiler
           end
 
           desc 'Run Test-Kitchen integration tests.'
-          task 'travis:integration' => ( integration_rackspace? ? %w{.ssh/id_rsa chef:kitchen} : %w{test/docker/docker.key ./docker chef:kitchen} )
+          task 'travis:integration' => ( ( integration_rackspace? ? %w{.ssh/id_rsa} : integration_docker? ? %w{test/docker/docker.key ./docker} : [] ) + %w{chef:kitchen} )
 
           desc 'Run CI tests'
           task 'travis' do
@@ -87,8 +87,14 @@ module PoiseBoiler
           ENV['TRAVIS_SECURE_ENV_VARS'] == 'true' && File.exist?('.kitchen.yml')
         end
 
-        # Should we set things up for Rackspace integration tests? The default
-        # is to use Docker.
+        # Should we set things up for Docker integration tests?
+        #
+        # @return [Boolean]
+        def integration_docker?
+          File.exist?('test/docker')
+        end
+
+        # Should we set things up for Rackspace integration tests?
         #
         # @return [Boolean]
         def integration_rackspace?
