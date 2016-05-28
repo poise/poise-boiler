@@ -18,62 +18,66 @@ ENV NO_PROXY <%= no_proxy %>
 <% end %>
 <%# Per-platform initializations. %>
 <% case @platform; when 'debian', 'ubuntu' %>
-<% if @disable_upstart %>
-RUN dpkg-divert --local --rename --add /sbin/initctl
-RUN ln -sf /bin/true /sbin/initctl
-<% end %>
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update -o dockercachebust=<%= Date.today %>
-RUN apt-get install -y sudo openssh-server curl lsb-release net-tools rsync
+RUN apt-get update -o dockercachebust=<%= Date.today %> \
+<% if @disable_upstart %>
+  && dpkg-divert --local --rename --add /sbin/initctl \
+  && ln -sf /bin/true /sbin/initctl \
+<% end %>
+  && apt-get install -y sudo openssh-server curl lsb-release net-tools rsync \
 <% when 'rhel', 'centos', 'fedora' %>
-RUN yum clean all
-RUN yum install -y sudo openssh-server openssh-clients which curl net-tools iproute rsync passwd
+RUN yum clean all \
+  && yum install -y sudo openssh-server openssh-clients which curl net-tools iproute rsync passwd \
 <%# CentOS 7 does not install hostname by default, but EL6 has no hostname package. %>
-RUN yum install -y hostname || true
-RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
-RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+  && yum install -y hostname || true \
+  && ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' \
+  && ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N '' \
 <% when 'arch' %>
-RUN pacman -Syu --noconfirm
-RUN pacman -S --noconfirm openssh sudo curl
-RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
-RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN pacman -Syu --noconfirm \
+  && pacman -S --noconfirm openssh sudo curl \
+  && ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key \
+  && ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key \
 <% when 'gentoo' %>
-RUN emerge sync
-RUN emerge net-misc/openssh app-admin/sudo
-RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
-RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN emerge sync \
+  && emerge net-misc/openssh app-admin/sudo \
+  && ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key \
+  && ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key \
 <% when 'gentoo-paludis' %>
-RUN cave sync
-RUN cave resolve -zx net-misc/openssh app-admin/sudo
-RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
-RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+RUN cave sync \
+  && cave resolve -zx net-misc/openssh app-admin/sudo \
+  && ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key \
+  && ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key \
 <% when 'freebsd' %>
 <%# SUPER UN-TESTED BULLSHIT %>
 RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf \
-  && env ASSUME_ALWAYS_YES=true pkg install sudo curl bash
-RUN ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key
-RUN ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key
+  && env ASSUME_ALWAYS_YES=true pkg install sudo curl bash \
+  && ssh-keygen -A -t rsa -f /etc/ssh/ssh_host_rsa_key \
+  && ssh-keygen -A -t dsa -f /etc/ssh/ssh_host_dsa_key \
+<% else %>
+<%# Make sure we start off the RUN directive to match the others. %>
+RUN true \
 <% end %>
 <%# Create the kitchen user, give it sudo, and create and authorized keys. %>
 <% homedir = @username == 'root' ? '/root' : "/home/#{@username}" %>
-RUN if ! getent passwd <%= @username %>; then \
+  && if ! getent passwd <%= @username %>; then \
   <% if @platform == 'freebsd' %>pw <% end %>useradd <%= @username %> -d <%= homedir %> -m -s /bin/<%= @platform == 'freebsd' ? 'csh' : 'bash' %>; \
-fi
+fi \
 <% if @password && !@password.empty? %>
-RUN echo <%= @username %>:<%= @password %> | chpasswd
+  && echo <%= @username %>:<%= @password %> | chpasswd \
 <% else %>
-RUN passwd -d <%= @username %>
+  && passwd -d <%= @username %> \
 <% end %>
-RUN echo '<%= @username %> ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN mkdir -p /etc/sudoers.d
-RUN echo '<%= @username %> ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/<%= @username %>
-RUN chmod 0440 /etc/sudoers.d/<%= @username %>
-RUN mkdir -p <%= homedir %>/.ssh
-RUN chown -R <%= @username %> <%= homedir %>/.ssh
-RUN chmod 0700 <%= homedir %>/.ssh
-RUN touch <%= homedir %>/.ssh/authorized_keys
-RUN chown <%= @username %> <%= homedir %>/.ssh/authorized_keys
-RUN chmod 0600 <%= homedir %>/.ssh/authorized_keys
+  && echo '<%= @username %> ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+  && mkdir -p /etc/sudoers.d \
+  && echo '<%= @username %> ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/<%= @username %> \
+  && chmod 0440 /etc/sudoers.d/<%= @username %> \
+  && mkdir -p <%= homedir %>/.ssh \
+  && chown -R <%= @username %> <%= homedir %>/.ssh \
+  && chmod 0700 <%= homedir %>/.ssh \
+  && touch <%= homedir %>/.ssh/authorized_keys \
+  && chown <%= @username %> <%= homedir %>/.ssh/authorized_keys \
+  && chmod 0600 <%= homedir %>/.ssh/authorized_keys
+<%# /RUN layer started in the platform initialization %>
 <%# Install Chef and Test Kitchen-related gems. %>
 RUN curl -L https://chef.io/chef/install.sh | bash -s --<%= ENV['POISE_MASTER_BUILD'] ? " -n -- #{Date.today}" : PoiseBoiler::Kitchen.instance.chef_version ? " -v #{PoiseBoiler::Kitchen.instance.chef_version}" : '' %> && \
     env GEM_HOME=/tmp/verifier/gems GEM_PATH=/tmp/verifier/gems GEM_CACHE=/tmp/verifier/gems/cache /opt/chef/embedded/bin/gem install --no-rdoc --no-ri --bindir /tmp/verifier/bin busser busser-serverspec serverspec && \
