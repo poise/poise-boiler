@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.10.1
+
+* Install `yum-plugin-ovl` for better OverlayFS support on EL6 (EL7 base images
+  include it already).
+
 ## v1.10.0
 
 * Major reduction in the number of Docker layers created during tests.
