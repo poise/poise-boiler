@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.10.0
+
+* Major reduction in the number of Docker layers created during tests.
+* Minimal support for kitchen-ec2.
+
 ## v1.9.0
 
 * Super experimental Halite+Policy provisioner plugin.
