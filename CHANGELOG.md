@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.10.2
+
+* Bump to FoodCritic 7.
+
 ## v1.10.1
 
 * Install `yum-plugin-ovl` for better OverlayFS support on EL6 (EL7 base images
