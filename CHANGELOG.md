@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.10.3
+
+* Bump kitchen-docker to test the new 2.6.0 RC.
+
 ## v1.10.2
 
 * Bump to FoodCritic 7.
