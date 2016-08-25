@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.11.0
+
+* Bump ChefSpec dependency to 5.x.
+
 ## v1.10.3
 
 * Bump kitchen-docker to test the new 2.6.0 RC.
