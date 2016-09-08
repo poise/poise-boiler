@@ -65,8 +65,8 @@ Gem::Specification.new do |spec|
 
   # Windows integration gems
   spec.add_dependency 'kitchen-ec2', '~> 1.0'
-  spec.add_dependency 'winrm', '~> 1.6'
-  spec.add_dependency 'winrm-fs', '~> 0.4'
+  spec.add_dependency 'winrm', '~> 2.0'
+  spec.add_dependency 'winrm-fs', '~> 1.0'
 
   # Travis gems
   spec.add_dependency 'codeclimate-test-reporter', '~> 0.4'
