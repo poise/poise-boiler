@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.12.0
+
+* Bump winrm dependency to 2.x.
+* Bump winrm-fs dependency to 1.x.
+
 ## v1.11.0
 
 * Bump ChefSpec dependency to 5.x.
