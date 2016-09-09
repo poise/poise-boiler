@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.12.0
+
+* Bump `winrm` and `winrm-fs` gems for compat with newer Chef tooling.
+
 ## v1.11.0
 
 * Bump ChefSpec dependency to 5.x.
