@@ -1,4 +1,8 @@
-# Changelog
+# Poise-Boiler Changelog
+
+## 1.13.0
+
+* Bump Foodcritic dependency to 8.x.
 
 ## v1.12.0
 
