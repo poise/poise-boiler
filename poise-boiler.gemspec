@@ -52,7 +52,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'chefspec', '~> 5.0'
   spec.add_dependency 'fuubar', '~> 2.0'
   spec.add_dependency 'simplecov', '~> 0.9'
-  spec.add_dependency 'foodcritic', '~> 8.0'
+  # Foodcritic 8.0 dropped support for Ruby 2.1, so it can't be used with olded Chef.
+  spec.add_dependency 'foodcritic', '>= 7', '< 9'
 
   # Integration gems
   # https://github.com/test-kitchen/test-kitchen/issues/922
