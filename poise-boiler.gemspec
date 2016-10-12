@@ -66,8 +66,9 @@ Gem::Specification.new do |spec|
 
   # Windows integration gems
   spec.add_dependency 'kitchen-ec2', '~> 1.0'
-  spec.add_dependency 'winrm', '~> 2.0'
-  spec.add_dependency 'winrm-fs', '~> 1.0'
+  # Allow older winrm gems for poise-hoist and other things that need ChefDK. (chef-dk -> chef-provisioning -> winrm)
+  spec.add_dependency 'winrm', '>= 1.6', '< 3'
+  spec.add_dependency 'winrm-fs', '>= 0.4', '< 2'
 
   # Travis gems
   spec.add_dependency 'codeclimate-test-reporter', '~> 0.4'
