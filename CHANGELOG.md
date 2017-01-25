@@ -1,5 +1,9 @@
 # Poise-Boiler Changelog
 
+## 1.13.2
+
+* Re-allow older WinRM gems for ChefDK testing.
+
 ## 1.13.1
 
 * Re-allow Foodcritic 7.x to handle testing on Ruby 2.1 with older Chef.
