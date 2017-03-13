@@ -29,6 +29,7 @@ module PoiseBoiler
       # @see #expand_platforms
       PLATFORM_ALIASES = {
         'windows' => %w{windows-2012r2},
+        'windows32' => %w{windows-2008sp2},
         'ubuntu' => %w{ubuntu-12.04 ubuntu-14.04},
         'rhel' => %w{centos},
         'centos' => %w{centos-6 centos-7},
@@ -36,6 +37,12 @@ module PoiseBoiler
         'unix' => %w{linux}, #, freebsd},
         'all' => %w{unix windows},
       }
+
+      # Default EC2 subnet ID when not overridden in the environment or config.
+      DEFAULT_EC2_SUBNET_ID = 'subnet-ca674af7'
+
+      # Default EC2 security group when not overridden in the environment or config.
+      DEFAULT_EC2_SECURITY_GROUP_ID = 'sg-ed1ad892'
 
       def initialize(**options)
         # Figure out the directory that contains the kitchen.yml by looking for
@@ -156,8 +163,8 @@ module PoiseBoiler
           config['flavor_id'] = options[:rackspace_flavor] || 'general1-1'
         when 'ec2'
           # Allow passing some values as environment variables.
-          config['security_group_ids'] = [ENV['AWS_SECURITY_GROUP_ID']]
-          config['subnet_id'] = ENV['AWS_SUBNET_ID']
+          config['security_group_ids'] = ENV['AWS_SECURITY_GROUP_ID'] ? [ENV['AWS_SECURITY_GROUP_ID']] : [DEFAULT_EC2_SECURITY_GROUP_ID]
+          config['subnet_id'] = ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_SUBNET_ID
         end
         config
       end
@@ -212,13 +219,23 @@ module PoiseBoiler
           'driver' => {
             'name' => 'ec2',
             'instance_type' => 'm3.medium',
-            'aws_ssh_key_id' => 'ec2',
+            'aws_ssh_key_id' => ENV['CI'] ? "#{cookbook_name}-kitchen" : 'ec2',
+            'security_group_ids' => ENV['AWS_SECURITY_GROUP_ID'] ? [ENV['AWS_SECURITY_GROUP_ID']] : [DEFAULT_EC2_SECURITY_GROUP_ID],
+            'subnet_id' => ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_SUBNET_ID,
           },
           'transport' => {
             'name' => 'winrm',
-            'ssh_key' => File.expand_path('~/.ssh/ec2.pem'),
+            'ssh_key' => ENV['CI'] ? "#{base}/test/ec2/ssh.key" : File.expand_path('~/.ssh/ec2.pem'),
           },
-        }
+        }.tap do |cfg|
+          if name == 'windows-2008sp2'
+            cfg['driver']['image_id'] = 'ami-f6a043e0'
+            cfg['driver']['instance_type'] = 'm1.medium'
+            cfg['provisioner'] ||= {}
+            cfg['provisioner']['product_name'] = 'chef'
+            cfg['provisioner']['architecture'] = 'i386'
+          end
+        end
       end
 
       # Generate a Test Kitchen suite configuration hash. This is a single suite
