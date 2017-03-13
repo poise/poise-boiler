@@ -41,6 +41,9 @@ module PoiseBoiler
       # Default EC2 subnet ID when not overridden in the environment or config.
       DEFAULT_EC2_SUBNET_ID = 'subnet-ca674af7'
 
+      # Default EC2 subnet ID for previous-generation instance types.
+      DEFAULT_EC2_LEGACY_INSTANCES_SUBNET_ID = 'subnet-1ffec232'
+
       # Default EC2 security group when not overridden in the environment or config.
       DEFAULT_EC2_SECURITY_GROUP_ID = 'sg-ed1ad892'
 
@@ -231,6 +234,7 @@ module PoiseBoiler
           if name == 'windows-2008sp2'
             cfg['driver']['image_id'] = 'ami-f6a043e0'
             cfg['driver']['instance_type'] = 'm1.medium'
+            cfg['driver']['subnet_id'] = ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_LEGACY_INSTANCES_SUBNET_ID
             cfg['provisioner'] ||= {}
             cfg['provisioner']['product_name'] = 'chef'
             cfg['provisioner']['architecture'] = 'i386'
