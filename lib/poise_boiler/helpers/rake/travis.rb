@@ -57,22 +57,25 @@ module PoiseBoiler
           end
 
           task 'travis:integration:rackspace' do
-            return unless integration_rackspace?
-            shell.say('Configuring Rackspace test dependencies')
-            task('.ssh/id_rsa').invoke
+            if integration_rackspace?
+              shell.say('Configuring Rackspace test dependencies')
+              task('.ssh/id_rsa').invoke
+            end
           end
 
           task 'travis:integration:docker' do
-            return unless integration_docker?
-            shell.say('Configuring Docker test dependencies')
-            task('test/docker/docker.key').invoke
-            task('./docker').invoke
+            if integration_docker?
+              shell.say('Configuring Docker test dependencies')
+              task('test/docker/docker.key').invoke
+              task('./docker').invoke
+            end
           end
 
           task 'travis:integration:ec2' do
-            return unless ENV['KITCHEN_EC2_PASS']
-            shell.say('Configuring EC2 test dependencies')
-            sh(*%w{openssl rsa -in test/ec2/ssh.pem -passin env:KITCHEN_EC2_PASS -out test/ec2/ssh.key})
+            if ENV['KITCHEN_EC2_PASS']
+              shell.say('Configuring EC2 test dependencies')
+              sh(*%w{openssl rsa -in test/ec2/ssh.pem -passin env:KITCHEN_EC2_PASS -out test/ec2/ssh.key})
+            end
           end
 
           desc 'Run Test-Kitchen integration tests.'
