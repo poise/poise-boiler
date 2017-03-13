@@ -237,6 +237,11 @@ module PoiseBoiler
             cfg['driver']['subnet_id'] = ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_LEGACY_INSTANCES_SUBNET_ID
             cfg['provisioner'] ||= {}
             cfg['provisioner']['product_name'] = 'chef'
+            if ENV['POISE_MASTER_BUILD']
+              cfg['provisioner']['channel'] = 'current'
+            else
+              cfg['provisioner']['product_version'] = chef_version if chef_version
+            end
             cfg['provisioner']['architecture'] = 'i386'
           end
         end
