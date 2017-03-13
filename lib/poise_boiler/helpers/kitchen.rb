@@ -225,6 +225,7 @@ module PoiseBoiler
             'aws_ssh_key_id' => ENV['CI'] ? "#{cookbook_name}-kitchen" : 'ec2',
             'security_group_ids' => ENV['AWS_SECURITY_GROUP_ID'] ? [ENV['AWS_SECURITY_GROUP_ID']] : [DEFAULT_EC2_SECURITY_GROUP_ID],
             'subnet_id' => ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_SUBNET_ID,
+            'retryable_tries' => 120,
           },
           'transport' => {
             'name' => 'winrm',
