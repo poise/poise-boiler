@@ -227,22 +227,21 @@ module PoiseBoiler
             'subnet_id' => ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_SUBNET_ID,
             'retryable_tries' => 120,
           },
+          'provisioner' => {
+            'product_name' => 'chef',
+            'channel' =>  chef_version ? 'stable' : 'current',
+            'product_version' => chef_version,
+          },
           'transport' => {
             'name' => 'winrm',
             'ssh_key' => ENV['CI'] ? "#{base}/test/ec2/ssh.key" : File.expand_path('~/.ssh/ec2.pem'),
           },
         }.tap do |cfg|
+
           if name == 'windows-2008sp2'
             cfg['driver']['image_id'] = 'ami-f6a043e0'
             cfg['driver']['instance_type'] = 'm1.medium'
             cfg['driver']['subnet_id'] = ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_LEGACY_INSTANCES_SUBNET_ID
-            cfg['provisioner'] ||= {}
-            cfg['provisioner']['product_name'] = 'chef'
-            if ENV['POISE_MASTER_BUILD']
-              cfg['provisioner']['channel'] = 'current'
-            else
-              cfg['provisioner']['product_version'] = chef_version if chef_version
-            end
             cfg['provisioner']['architecture'] = 'i386'
           end
         end
