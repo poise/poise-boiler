@@ -165,9 +165,7 @@ module PoiseBoiler
           # Set a default instance size.
           config['flavor_id'] = options[:rackspace_flavor] || 'general1-1'
         when 'ec2'
-          # Allow passing some values as environment variables.
-          config['security_group_ids'] = ENV['AWS_SECURITY_GROUP_ID'] ? [ENV['AWS_SECURITY_GROUP_ID']] : [DEFAULT_EC2_SECURITY_GROUP_ID]
-          config['subnet_id'] = ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_SUBNET_ID
+          config.update(ec2_driver_config)
         end
         config
       end
@@ -179,8 +177,15 @@ module PoiseBoiler
         {
           # Use the sftp transport from kitchen-sync.
           'name' => 'sftp',
-          # Use the generated SSH key from kitchen-docker if present.
-          'ssh_key' => kitchen_driver == 'docker' ? File.expand_path('.kitchen/docker_id_rsa', base) : nil,
+          # Use the SSH key for this driver.
+          'ssh_key' => case kitchen_driver
+                       when 'docker'
+                         "#{base}/.kitchen/docker_id_rsa"
+                       when 'ec2'
+                         "#{base}/test/ec2/ssh.key"
+                       else
+                         nil
+                       end,
         }
       end
 
@@ -219,14 +224,10 @@ module PoiseBoiler
       # Generate extra Test Kitchen platform configuration for Windows hosts.
       def windows_platform_config(name)
         {
-          'driver' => {
-            'name' => 'ec2',
+          'driver' => ec2_driver_config.merge({
             'instance_type' => 'm3.medium',
-            'aws_ssh_key_id' => ENV['CI'] ? "#{cookbook_name}-kitchen" : 'ec2',
-            'security_group_ids' => ENV['AWS_SECURITY_GROUP_ID'] ? [ENV['AWS_SECURITY_GROUP_ID']] : [DEFAULT_EC2_SECURITY_GROUP_ID],
-            'subnet_id' => ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_SUBNET_ID,
             'retryable_tries' => 120,
-          },
+          }),
           'provisioner' => {
             'product_name' => 'chef',
             'channel' =>  chef_version ? 'stable' : 'current',
@@ -234,10 +235,9 @@ module PoiseBoiler
           },
           'transport' => {
             'name' => 'winrm',
-            'ssh_key' => ENV['CI'] ? "#{base}/test/ec2/ssh.key" : File.expand_path('~/.ssh/ec2.pem'),
+            'ssh_key' => "#{base}/test/ec2/ssh.key",
           },
         }.tap do |cfg|
-
           if name == 'windows-2008sp2'
             cfg['driver']['image_id'] = 'ami-f6a043e0'
             cfg['driver']['instance_type'] = 'm1.medium'
@@ -255,6 +255,19 @@ module PoiseBoiler
         {
           'name' => 'default',
           'run_list' => (File.exist?(File.join(base, 'test', 'cookbook')) || File.exist?(File.join(base, 'test', 'cookbooks'))) ? ["#{cookbook_name}_test"] : [cookbook_name],
+        }
+      end
+
+      # Generate a Test Kitchen driver configuration hash with basic settings
+      # for kitchen-ec2.
+      #
+      # @return [Hash]
+      def ec2_driver_config
+        {
+          'name' => 'ec2',
+          'aws_ssh_key_id' => "#{cookbook_name}-kitchen",
+          'security_group_ids' => ENV['AWS_SECURITY_GROUP_ID'] ? [ENV['AWS_SECURITY_GROUP_ID']] : [DEFAULT_EC2_SECURITY_GROUP_ID],
+          'subnet_id' => ENV['AWS_SUBNET_ID'] || DEFAULT_EC2_SUBNET_ID,
         }
       end
 
