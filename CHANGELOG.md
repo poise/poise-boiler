@@ -1,5 +1,10 @@
 # Poise-Boiler Changelog
 
+## 1.14.0
+
+* Improvements to EC2 and Windows testing with Kitchen. EC2 data handling is now
+  mostly standardized with some reasonable defaults.
+
 ## 1.13.2
 
 * Re-allow older WinRM gems for ChefDK testing.
