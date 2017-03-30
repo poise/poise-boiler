@@ -36,6 +36,10 @@ module PoiseBoiler
           @real_cookbook_deps = {}
           gems_to_convert = {'poise-profiler' => Halite::Gem.new('poise-profiler')}
           gems_to_check = [poise_helper_instance.cookbook]
+          # Only look at dev dependcies of the top-level spec, which happens to
+          # be the first since this is a breadth-first analysis. Kind of hacky
+          # but less hacky than refactoring this whole loop.
+          first = true
           until gems_to_check.empty?
             check = gems_to_check.pop
             # Already in the list, skip expansion.
@@ -44,7 +48,7 @@ module PoiseBoiler
             next unless check.is_halite_cookbook?
             gems_to_convert[check.name] = check
             # Expand dependencies and check each of those.
-            check.cookbook_dependencies.each do |dep|
+            check.cookbook_dependencies(development: first).each do |dep|
               dep_cook = dep.cookbook
               if dep_cook
                 gems_to_check << dep_cook
@@ -52,6 +56,7 @@ module PoiseBoiler
                 @real_cookbook_deps[dep.name] = dep
               end
             end
+            first = false
           end
           # Convert all the things!
           tmpbooks_dir = File.join(dest, 'cookbooks')
