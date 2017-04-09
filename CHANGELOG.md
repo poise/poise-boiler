@@ -1,5 +1,10 @@
 # Poise-Boiler Changelog
 
+## 1.15.0
+
+* Support gathering development dependencies from cookbook gems when using the
+  Poise-mode Kitchen provisioners.
+
 ## 1.14.0
 
 * Improvements to EC2 and Windows testing with Kitchen. EC2 data handling is now
