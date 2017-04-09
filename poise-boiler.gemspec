@@ -40,7 +40,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'travis', '~> 1.8', '>= 1.8.1'
   spec.add_dependency 'yard', '~> 0.8'
   spec.add_dependency 'yard-classmethods', '~> 1.0'
-  spec.add_dependency 'halite', '~> 1.2' # This is a circular dependency
+  spec.add_dependency 'halite', '~> 1.6' # This is a circular dependency
   spec.add_dependency 'mixlib-shellout', '>= 1.4', '< 3.0' # Chef 11 means shellout 1.4 :-(
   spec.add_dependency 'pry'
   spec.add_dependency 'pry-byebug'
