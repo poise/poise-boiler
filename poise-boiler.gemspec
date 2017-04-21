@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
 
   # Development gems
   spec.add_dependency 'bundler' # Used for Bundler.load_gemspec
-  spec.add_dependency 'rake', '>= 10.4', '< 12.0'
+  spec.add_dependency 'rake', '>= 10.4', '< 13'
   spec.add_dependency 'travis', '~> 1.8', '>= 1.8.1'
   spec.add_dependency 'yard', '~> 0.8'
   spec.add_dependency 'yard-classmethods', '~> 1.0'
@@ -49,11 +49,11 @@ Gem::Specification.new do |spec|
   # Test gems
   spec.add_dependency 'rspec', '~> 3.2'
   spec.add_dependency 'rspec-its', '~> 1.2'
-  spec.add_dependency 'chefspec', '~> 5.0'
+  spec.add_dependency 'chefspec', '>= 5', '< 8' # Allow ChefSpec 5 for early 12.x.
   spec.add_dependency 'fuubar', '~> 2.0'
   spec.add_dependency 'simplecov', '~> 0.9'
   # Foodcritic 8.0 dropped support for Ruby 2.1, so it can't be used with olded Chef.
-  spec.add_dependency 'foodcritic', '>= 7', '< 9'
+  spec.add_dependency 'foodcritic', '>= 7', '< 10'
 
   # Integration gems
   # https://github.com/test-kitchen/test-kitchen/issues/922
@@ -71,7 +71,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'winrm-fs', '>= 0.4', '< 2'
 
   # Travis gems
-  spec.add_dependency 'codeclimate-test-reporter', '~> 0.4'
+  spec.add_dependency 'codeclimate-test-reporter', '~> 1.0'
   spec.add_dependency 'codecov', '~> 0.0', '>= 0.0.2'
 
   # Development dependencies (yo dawg)
