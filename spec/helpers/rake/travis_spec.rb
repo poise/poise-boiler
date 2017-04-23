@@ -26,6 +26,8 @@ Gem::Specification.new do |s|
   s.authors = ['Alan Smithee']
   s.email = %{asmithee@example.com}
   s.homepage = 'https://github.com/example/example'
+  s.license = 'Apache-2.0'
+  s.metadata['platforms'] = 'ubuntu'
 end
 EOH
   file '.kitchen.yml', <<-EOH
@@ -42,6 +44,7 @@ suites:
 - name: default
 EOH
   file 'README.md'
+  file 'LICENSE'
 
   context 'no secure vars' do
     environment TRAVIS_SECURE_ENV_VARS: 'false'
