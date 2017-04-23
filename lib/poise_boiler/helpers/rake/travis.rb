@@ -52,7 +52,7 @@ module PoiseBoiler
 
           file '.ssh/id_rsa' do
             # Add a zero-byte passphrase field.
-            cmd = %w{ssh-keygen -f} + [File.expand_path('~/.ssh/id_rsa')] +  %w{-b 768 -P} + ['']
+            cmd = %w{ssh-keygen -f} + [File.expand_path('~/.ssh/id_rsa')] +  %w{-b 1024 -P} + ['']
             sh(*cmd)
           end
 
