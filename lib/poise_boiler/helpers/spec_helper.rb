@@ -31,6 +31,7 @@ module PoiseBoiler
         require 'simplecov'
         require 'pry'
         require 'pry-byebug'
+        require 'chefspec'
 
         # Check for coverage stuffs
         formatters = []
