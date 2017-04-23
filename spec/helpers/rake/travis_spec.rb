@@ -49,10 +49,12 @@ EOH
   context 'no secure vars' do
     environment TRAVIS_SECURE_ENV_VARS: 'false'
 
-    its(:stdout) { is_expected.to include 'Running task spec' }
-    its(:stdout) { is_expected.to include 'Running task chef:foodcritic' }
-    its(:stdout) { is_expected.to_not include 'Running task travis:integration' }
-    its(:exitstatus) { is_expected.to eq 0 }
+    it do
+      expect(subject.stdout).to include 'Running task spec'
+      expect(subject.stdout).to include 'Running task chef:foodcritic'
+      expect(subject.stdout).to_not include 'Running task travis:integration'
+      expect(subject.exitstatus).to eq 0
+    end
   end # /context no secure vars
 
   context 'secure vars' do
@@ -114,10 +116,12 @@ UbWRwbhlKYyN9bgK47cxD7r39KRh3jAkiTcMlscquirkZTuyWj5INTn/g2ICIg5w
 -----END RSA PRIVATE KEY-----
 EOH
 
-    its(:stdout) { is_expected.to include 'Running task spec' }
-    its(:stdout) { is_expected.to include 'Running task chef:foodcritic' }
-    its(:stdout) { is_expected.to include 'Running task travis:integration' }
-    its(:exitstatus) { is_expected.to eq 0 }
+    it do
+      expect(subject.stdout).to include 'Running task spec'
+      expect(subject.stdout).to include 'Running task chef:foodcritic'
+      expect(subject.stdout).to include 'Running task travis:integration'
+      expect(subject.exitstatus).to eq 0
+    end
   end # /context secure vars
 
   context 'secure vars and Rackspace' do
@@ -141,9 +145,11 @@ EOH
       _environment['HOME'] = temp_path
     end
 
-    its(:stdout) { is_expected.to include 'Running task spec' }
-    its(:stdout) { is_expected.to include 'Running task chef:foodcritic' }
-    its(:stdout) { is_expected.to include 'Running task travis:integration' }
-    its(:exitstatus) { is_expected.to eq 0 }
+    it do
+      expect(subject.stdout).to include 'Running task spec'
+      expect(subject.stdout).to include 'Running task chef:foodcritic'
+      expect(subject.stdout).to include 'Running task travis:integration'
+      expect(subject.exitstatus).to eq 0
+    end
   end
 end
