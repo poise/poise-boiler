@@ -16,8 +16,7 @@
 
 require 'fileutils'
 
-# From chef-dk.
-require 'kitchen/provisioner/policyfile_zero'
+require 'kitchen/provisioner/chef_zero'
 require 'mixlib/shellout'
 
 require 'poise_boiler/helpers/kitchen/provisioner_helpers'
@@ -26,7 +25,7 @@ require 'poise_boiler/helpers/kitchen/provisioner_helpers'
 module PoiseBoiler
   module Helpers
     class Kitchen
-      class PolicyProvisioner < ::Kitchen::Provisioner::PolicyfileZero
+      class PolicyProvisioner < ::Kitchen::Provisioner::ChefZero
         include ProvisionerHelpers
 
         # Override the default value from the base class.
@@ -51,8 +50,12 @@ module PoiseBoiler
           # Compile that policy because the base provider doesn't do that.
           compile_poise_policy(policy_path)
           # Tell the base provider code to use our new policy instead.
-          config[:policyfile] = policy_path
+          config[:policyfile_path] = policy_path
           super
+        end
+
+        def cleanup_sandbox
+          super if @sandbox_path
         end
 
         private
@@ -61,8 +64,8 @@ module PoiseBoiler
           info("Preparing modified policy")
           original_policy = IO.read(config[:policyfile])
           new_policy = "default_source :chef_repo, #{base.inspect}\n#{original_policy}"
-          policy_path = File.join(config[:kitchen_root], '.kitchen', "poise_policy_#{instance.name}.rb")
-          IO.write(policy_path, new_policy)
+          policy_path = ".kitchen/poise_policy_#{instance.name}.rb"
+          IO.write("#{config[:kitchen_root]}/#{policy_path}", new_policy)
           policy_path
         end
 
