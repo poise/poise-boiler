@@ -16,16 +16,23 @@
 
 require 'fileutils'
 
-require 'kitchen/provisioner/chef_zero'
+require 'chef/version'
 require 'mixlib/shellout'
 
 require 'poise_boiler/helpers/kitchen/provisioner_helpers'
 
+$use_policyfile_zero = Gem::Requirement.create('< 12.7').satisfied_by?(Gem::Version.create(Chef::VERSION))
+
+if $use_policyfile_zero
+  require 'kitchen/provisioner/policyfile_zero'
+else
+  require 'kitchen/provisioner/chef_zero'
+end
 
 module PoiseBoiler
   module Helpers
     class Kitchen
-      class PolicyProvisioner < ::Kitchen::Provisioner::ChefZero
+      class PolicyProvisioner < ($use_policyfile_zero ? ::Kitchen::Provisioner::PolicyfileZero : ::Kitchen::Provisioner::ChefZero )
         include ProvisionerHelpers
 
         # Override the default value from the base class.
@@ -50,7 +57,11 @@ module PoiseBoiler
           # Compile that policy because the base provider doesn't do that.
           compile_poise_policy(policy_path)
           # Tell the base provider code to use our new policy instead.
-          config[:policyfile_path] = policy_path
+          if $use_policyfile_zero
+            config[:policyfile] = "#{config[:kitchen_root]}/#{policy_path}"
+          else
+            config[:policyfile_path] = policy_path
+          end
           super
         end
 
