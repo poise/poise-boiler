@@ -16,9 +16,4 @@
 
 eval_gemfile File.expand_path('../../Gemfile', __FILE__)
 
-gem 'chef', git: 'https://github.com/chef/chef.git'
-gem 'chefspec', git: 'https://github.com/sethvargo/chefspec.git'
-gem 'fauxhai', git: 'https://github.com/customink/fauxhai.git'
-gem 'foodcritic', git: 'https://github.com/foodcritic/foodcritic.git'
-gem 'halite', git: 'https://github.com/poise/halite.git'
-gem 'ohai', git: 'https://github.com/chef/ohai.git'
+gem 'chef', '~> 13.0'
