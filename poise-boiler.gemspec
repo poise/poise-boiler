@@ -46,6 +46,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'pry-byebug'
   spec.add_dependency 'git', '~> 1.2'
 
+  # IRB helper gems
+  spec.add_dependency 'wirb'
+  spec.add_dependency 'hirb'
+  spec.add_dependency 'awesome_print'
+
   # Test gems
   spec.add_dependency 'rspec', '~> 3.2'
   spec.add_dependency 'rspec-its', '~> 1.2'
