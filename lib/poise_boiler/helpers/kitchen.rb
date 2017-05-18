@@ -30,7 +30,7 @@ module PoiseBoiler
       PLATFORM_ALIASES = {
         'windows' => %w{windows-2012r2},
         'windows32' => %w{windows-2008sp2},
-        'ubuntu' => %w{ubuntu-12.04 ubuntu-14.04},
+        'ubuntu' => %w{ubuntu-14.04 ubuntu-16.04},
         'rhel' => %w{centos},
         'centos' => %w{centos-6 centos-7},
         'linux' => %w{ubuntu rhel centos},
