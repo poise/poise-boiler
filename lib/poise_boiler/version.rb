@@ -16,5 +16,5 @@
 
 
 module PoiseBoiler
-  VERSION = '1.15.1.pre'
+  VERSION = '1.16.0'
 end
