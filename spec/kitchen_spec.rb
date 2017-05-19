@@ -49,7 +49,7 @@ EOH
       command 'kitchen list'
       its(:stdout) do
         is_expected.to match(/default-ubuntu-1404\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
-        is_expected.to match(/default-ubuntu-1204\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
+        is_expected.to match(/default-ubuntu-1604\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
         is_expected.to match(/default-centos-6\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
         is_expected.to match(/default-centos-7\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
       end
@@ -72,7 +72,7 @@ EOH
     command 'kitchen list'
     its(:stdout) do
       is_expected.to_not match(/default-ubuntu-1404/)
-      is_expected.to_not match(/default-ubuntu-1204/)
+      is_expected.to_not match(/default-ubuntu-1604/)
       is_expected.to match(/default-centos-6\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
       is_expected.to match(/default-centos-7\s+(Vagrant|Dummy)\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
     end
@@ -123,7 +123,7 @@ EOH
       _environment['HOME'] = temp_path
     end
     its(:stdout) do
-      is_expected.to match(/default-ubuntu-1204\s+Rackspace\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
+      is_expected.to match(/default-ubuntu-1404\s+Rackspace\s+PoiseSolo\s+(Busser\s+Sftp\s+)?<Not Created>/)
     end
   end # /context with kitchen-rackspace
 end
