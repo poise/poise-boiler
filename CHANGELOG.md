@@ -1,5 +1,12 @@
 # Poise-Boiler Changelog
 
+## 1.16.0
+
+* Dropping Ubuntu 12.04 from the `linux` platform alias and adding 16.04.
+* Adding my IRB extension gems.
+* Use Test Kitchen's policyfile support for Chef versions that allow it.
+* Dependency version updates.
+
 ## 1.15.0
 
 * Support gathering development dependencies from cookbook gems when using the
