@@ -31,3 +31,6 @@ desc 'Run all tests'
 task :test => [:spec]
 
 task :default => [:test]
+
+# For compat with my normal test layout.
+task :travis => [:test]
