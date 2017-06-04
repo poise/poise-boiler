@@ -77,7 +77,7 @@ module PoiseBoiler
         elsif ENV['SPEC_BLOCK_CI'] != 'true'
           # If there isn't a specific override, lock TK to use the same version of Chef as the Gemfile.
           require 'chef/version'
-          Chef::VERSION
+          Chef::VERSION.to_s
         end
       end
 
