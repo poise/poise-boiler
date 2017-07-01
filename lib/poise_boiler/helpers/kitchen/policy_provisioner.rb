@@ -81,8 +81,13 @@ module PoiseBoiler
         end
 
         def compile_poise_policy(policy_path)
-          info("Compiling policy")
-          compile_cmd = Mixlib::ShellOut.new(['chef', 'update', policy_path])
+          compile_mode = if File.exist?(policy_path.gsub(/\.rb/, '.lock.json'))
+            'update'
+          else
+            'install'
+          end
+          info("Compiling policy (#{compile_mode})")
+          compile_cmd = Mixlib::ShellOut.new(['chef', compile_mode, policy_path])
           compile_cmd.run_command
           compile_cmd.error!
         end
