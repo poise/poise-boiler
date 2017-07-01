@@ -36,6 +36,7 @@ module PoiseBoiler
         'linux' => %w{ubuntu rhel centos},
         'unix' => %w{linux}, #, freebsd},
         'all' => %w{unix windows},
+        'any' => %w{ubuntu-16.04}, # For cookbooks that don't actually use platform-specific bits.
       }
 
       # Default EC2 subnet ID when not overridden in the environment or config.
