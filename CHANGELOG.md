@@ -1,5 +1,11 @@
 # Poise-Boiler Changelog
 
+## 1.17.0
+
+* Compat with the new `Chef::VERSION` magic object.
+* Fix for the breakage of `chef update`: https://github.com/chef/chef-dk/issues/1304.
+* New platform alias `any` for cookbooks that don't care what platform they run on.
+
 ## 1.16.0
 
 * Dropping Ubuntu 12.04 from the `linux` platform alias and adding 16.04.
