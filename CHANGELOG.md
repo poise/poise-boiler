@@ -1,5 +1,9 @@
 # Poise-Boiler Changelog
 
+## 1.18.0
+
+* Ensure `ss` is available in Ubuntu test images, for Serverspec's `port()` resource.
+
 ## 1.17.0
 
 * Compat with the new `Chef::VERSION` magic object.
