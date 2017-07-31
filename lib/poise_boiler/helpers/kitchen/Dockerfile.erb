@@ -25,6 +25,7 @@ RUN apt-get update -o dockercachebust=<%= Date.today %> \
   && ln -sf /bin/true /sbin/initctl \
 <% end %>
   && apt-get install -y sudo openssh-server curl lsb-release net-tools rsync \
+  && apt-get install -y iproute2 || true \ <%# Ubuntu 12.04 doesn't include iproute2 but newer OSes need it for ss (used for port checks). %>
 <% when 'rhel', 'centos', 'fedora' %>
 RUN yum clean all \
   && yum install -y sudo openssh-server openssh-clients which curl net-tools iproute rsync passwd yum-plugin-ovl \
