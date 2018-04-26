@@ -61,8 +61,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'foodcritic', '>= 7', '< 14'
 
   # Integration gems
-  # https://github.com/test-kitchen/test-kitchen/issues/922
-  spec.add_dependency 'test-kitchen', '~> 1.7', '>= 1.7.1'
+  spec.add_dependency 'test-kitchen', '~> 1.21', '>= 1.21.1'
   spec.add_dependency 'kitchen-vagrant'
   spec.add_dependency 'vagrant-wrapper'
   spec.add_dependency 'kitchen-docker', '>= 2.6.0.rc.0'
