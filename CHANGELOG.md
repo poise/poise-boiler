@@ -1,5 +1,10 @@
 # Poise-Boiler Changelog
 
+## 1.18.1
+
+* Force `test-kitchen` gem to be >= 1.21.1 to avoid metastable solution problems
+  with `thor` 0.20.
+
 ## 1.18.0
 
 * Ensure `ss` is available in Ubuntu test images, for Serverspec's `port()` resource.
